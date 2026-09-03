@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tube Clean</title>
+<meta name="description" content="Tube Clean: Safari-Erweiterung für iOS, die YouTube im Bild-in-Bild-Fenster hält und Videos im Hintergrund weiterlaufen lässt. Nur eine Berechtigung, keine Datensammlung.">
+<meta name="theme-color" content="#0A0A0C">
+<link rel="icon" href="../assets/img/tube-clean-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+  :root{--p-accent:var(--tube)}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  @media (max-width:760px){.steps{grid-template-columns:1fr}}
+  .step{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r-lg);padding:26px;display:flex;flex-direction:column;gap:10px}
+  .step .n{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--tube)}
+  .step h4{font-size:17px}
+  .step p{color:var(--ink-2);font-size:14.5px}
+  .demo{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r-lg);height:360px;position:relative;overflow:hidden}
+  .demo .mock{position:absolute;inset:0}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../index.html"><span class="mark">NS</span>Nikolas Sarafski</a>
+    <ul class="nav">
+      <li><a href="../index.html#projekte">Projekte</a></li>
+      <li class="hide-s"><a href="../index.html#ueber">Über mich</a></li>
+      <li><a href="../index.html#kontakt">Kontakt</a></li>
+      <li><a class="gh" href="https://github.com/Paray01" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a></li>
+    </ul>
+  </div>
+</header>
+
+<section class="p-hero">
+  <div class="wrap">
+    <a class="crumb" href="../index.html#projekte"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10.5 2 5 8l5.5 6 1-1L7 8l4.5-5z"/></svg>Alle Projekte</a>
+    <div class="p-title">
+      <div class="icon"><img src="../assets/img/tube-clean-icon.png" alt=""></div>
+      <div>
+        <div class="kicker">iOS · Safari-Erweiterung · Version 1.0</div>
+        <h1>Tube Clean</h1>
+      </div>
+    </div>
+    <p class="p-lede">Ohne Erweiterung beendet YouTube das Bild-in-Bild-Fenster, sobald man die App wechselt, und pausiert das Video, sobald Safari in den Hintergrund geht. Genau dann, wenn man es braucht. Tube Clean blockiert beides. Der Player bleibt unangetastet, nur der erzwungene Ausstieg und das erzwungene Pausieren fallen weg.</p>
+    <dl class="meta">
+      <div><dt>Plattform</dt><dd>iOS, Safari Web Extension mit nativer Host-App</dd></div>
+      <div><dt>Berechtigung</dt><dd>Nur activeTab. Wirkt ausschließlich auf youtube.com</dd></div>
+      <div><dt>Daten</dt><dd>Keine. Kein fetch, kein Storage, keine Cookies, kein Tracking</dd></div>
+      <div><dt>Links</dt><dd><a href="https://paray01.github.io/tube-clean-support/" target="_blank" rel="noopener">Support-Seite</a><br><a href="https://paray01.github.io/tube-clean-support/privacy.html" target="_blank" rel="noopener">Datenschutzerklärung</a></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>Was man sieht</h2>
+        <p>Es gibt genau zwei Flächen: das Popover in der Safari-Leiste, das nur sagt, ob die Erweiterung gerade greift, und das Bild-in-Bild-Fenster, das offen bleibt.</p>
+      </div>
+    </div>
+    <div class="demo">
+      <div class="mock mock-tube" aria-hidden="true">
+        <div class="pop" style="width:260px;left:36px;top:36px">
+          <div class="st"><i></i>Aktiv auf YouTube</div>
+          <p>Bild-in-Bild bleibt offen, die Wiedergabe läuft im Hintergrund weiter. Es gibt nichts einzustellen.</p>
+        </div>
+        <div class="pip" style="width:36%;right:40px;bottom:36px">
+          <span class="lbl">PIP</span>
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          <div class="bar"><i></i></div>
+        </div>
+      </div>
+    </div>
+    <p class="stage-note"><b>Nachbau</b> in CSS nachgezeichnet, keine Screenshots</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head"><div><h2>Einrichtung in drei Schritten</h2></div></div>
+    <div class="steps">
+      <div class="step"><span class="n">1</span><h4>Einschalten</h4><p>Einstellungen, Safari, Erweiterungen, Tube Clean aktivieren. Für youtube.com erlauben.</p></div>
+      <div class="step"><span class="n">2</span><h4>YouTube öffnen</h4><p>In Safari, nicht in der YouTube-App. Ein Video starten und Bild-in-Bild wählen.</p></div>
+      <div class="step"><span class="n">3</span><h4>App wechseln</h4><p>Das Fenster bleibt, der Ton läuft weiter. Das Popover in der Leiste zeigt einen grünen Punkt, solange es greift.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="two">
+      <div class="prose">
+        <h2>Wie es arbeitet</h2>
+        <p>Die gesamte Wirkung steckt in einem Content-Script, das auf jeder YouTube-Seite läuft. Es greift den Player nicht an, sondern fängt die Stellen ab, an denen YouTube bei einem Sichtbarkeitswechsel das Bild-in-Bild beendet oder das Video pausiert. Fünf Eingriffe, alle in einer Datei.</p>
+        <p>Die Host-App ist reines UIKit und hat außer einer Anleitungsseite keine Funktion. Bei Safari-Erweiterungen ist das üblich: die App ist der Container, mit dem die Erweiterung ausgeliefert und in den Einstellungen aktivierbar wird. Seit dem nativen Startbildschirm braucht sie beim Kaltstart keinen eigenen WebContent-Prozess mehr.</p>
+      </div>
+      <div class="prose">
+        <h2>Entscheidungen</h2>
+        <p><strong>Keine Schalter.</strong> Das Content-Script läuft ohne Zutun, es gibt nichts einzustellen. Das Popover beantwortet nur die Frage, ob es gerade läuft.</p>
+        <p><strong>Flach statt Glas.</strong> Popover und App nutzen das Material des Systems. Was Safari schon zeigt, Name, Kontur, Hintergrund, wird nicht in HTML nachgebaut.</p>
+        <p><strong>Nur activeTab.</strong> Die kleinste Berechtigung, die für den Zweck reicht. Die Datenschutzerklärung wurde gegen den Code geprüft, nicht aus der Erinnerung geschrieben.</p>
+        <p><strong>Zweisprachig.</strong> Erweiterung, Support-Seite und Datenschutzerklärung in Englisch und Deutsch, die Seite folgt der Browsersprache.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="next">
+      <a href="focus-pomodoro.html"><span>Vorheriges Projekt</span>Focus. Pomodoro</a>
+      <a class="r" href="btc-mate.html"><span>Nächstes Projekt</span>BTC Mate</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap">
+    <span>© 2026 Nikolas Sarafski</span>
+    <nav>
+      <a href="https://github.com/Paray01" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:sarafski.nikolas@gmail.com">E-Mail</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="../assets/site.js"></script>
+</body>
+</html>

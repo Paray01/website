@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BTC Mate</title>
+<meta name="description" content="BTC Mate: Read-only Bitcoin-Portfolio-Tracker für iOS und Android mit interaktivem Netzwerk-Globus, Kennzahlen und Chart-Analyse.">
+<meta name="theme-color" content="#0A0A0C">
+<link rel="icon" href="../assets/img/btc-mate-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/site.css">
+<style>:root{--p-accent:var(--btc)}</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../index.html"><span class="mark">NS</span>Nikolas Sarafski</a>
+    <ul class="nav">
+      <li><a href="../index.html#projekte">Projekte</a></li>
+      <li class="hide-s"><a href="../index.html#ueber">Über mich</a></li>
+      <li><a href="../index.html#kontakt">Kontakt</a></li>
+      <li><a class="gh" href="https://github.com/Paray01" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a></li>
+    </ul>
+  </div>
+</header>
+
+<section class="p-hero">
+  <div class="wrap">
+    <a class="crumb" href="../index.html#projekte"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10.5 2 5 8l5.5 6 1-1L7 8l4.5-5z"/></svg>Alle Projekte</a>
+    <div class="p-title">
+      <div class="icon"><img src="../assets/img/btc-mate-icon.png" alt=""></div>
+      <div>
+        <div class="kicker">iOS · Android · im App Store</div>
+        <h1>BTC Mate</h1>
+      </div>
+    </div>
+    <p class="p-lede">Ein Bitcoin-Portfolio-Tracker, der nur liest. Öffentliche Wallet-Adressen mit Label anlegen, Guthaben und Transaktionen direkt aus dem Netzwerk laden, Wertentwicklung über 1 Tag bis Max verfolgen. Keine Private Keys, keine Seed Phrase, kein Zugriff auf die Coins.</p>
+    <div class="p-actions">
+      <a class="btn primary store" href="https://apps.apple.com/de/app/btc-mate/id6757913661" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.37 12.7c0-2.3 1.88-3.4 1.96-3.45-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.15-2.76.83-3.48.83-.72 0-1.83-.81-3-.79-1.55.02-2.97.9-3.77 2.28-1.6 2.78-.41 6.9 1.15 9.16.77 1.1 1.68 2.35 2.87 2.3 1.15-.05 1.59-.75 2.98-.75s1.79.75 3 .73c1.24-.02 2.03-1.13 2.79-2.24.88-1.28 1.24-2.53 1.26-2.6-.03-.01-2.42-.93-2.44-3.67zM14.1 5.95c.63-.77 1.06-1.84.94-2.9-.91.04-2.02.61-2.67 1.37-.58.68-1.1 1.77-.96 2.81 1.02.08 2.05-.52 2.69-1.28z"/></svg><span><small>Laden im</small>App Store</span></a>
+      <a class="btn" href="https://paray01.github.io/btc-mate-support/" target="_blank" rel="noopener">Support-Seite</a>
+    </div>
+    <dl class="meta">
+      <div><dt>Plattform</dt><dd>iOS 26 (SwiftUI), Android (Jetpack Compose)</dd></div>
+      <div><dt>Daten</dt><dd>mempool.space (Guthaben, Transaktionen, Hashrate), Bitnodes (Nodes), Kurs per WebSocket</dd></div>
+      <div><dt>Stand</dt><dd>Version 2.1 im App Store, Android in Entwicklung</dd></div>
+      <div><dt>Links</dt><dd><a href="https://apps.apple.com/de/app/btc-mate/id6757913661" target="_blank" rel="noopener">App Store</a><br><a href="https://paray01.github.io/btc-mate-support/" target="_blank" rel="noopener">Support-Seite</a></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>Die App</h2>
+        <p>Die vier Tabs, wie sie im App Store gezeigt werden.</p>
+      </div>
+    </div>
+    <div class="gallery">
+      <figure><img src="../assets/img/btc-mate-shot-1.jpg" alt="Overview: Bitcoin-Kurs mit Wochenchart, Fear-and-Greed-Index, beobachtete Adressen" loading="lazy"><figcaption>Overview: Kurs live, Chart von 1D bis Max, beobachtete Adressen</figcaption></figure>
+      <figure><img src="../assets/img/btc-mate-shot-2.jpg" alt="Explorer: Suche nach Blockhöhe, Transaktion oder Adresse, empfohlene Gebühren, Mempool, letzte Blöcke" loading="lazy"><figcaption>Blockchain: Block Explorer mit Gebühren, Mempool und letzten Blöcken</figcaption></figure>
+      <figure><img src="../assets/img/btc-mate-shot-3.jpg" alt="Insights: Marktkennzahlen, Abstand zum Allzeithoch, Sentiment, Netzwerk" loading="lazy"><figcaption>Insights: Markt, Sentiment, Netzwerk und Chart-Analyse</figcaption></figure>
+      <figure><img src="../assets/img/btc-mate-shot-4.jpg" alt="News: Meldungen nach Quelle gefiltert, nächstes Ereignis, Top Story" loading="lazy"><figcaption>News: Meldungen, Quellenfilter, Ereigniskalender</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>Netzwerk-Seite, live</h2>
+        <p>Der Design-Entwurf der Netzwerk-Seite als HTML: Globus ziehen, Zeitslider von 2009 bis heute schieben, Zeitraffer starten, Lernblöcke antippen.</p>
+      </div>
+    </div>
+    <div class="tabs" role="tablist">
+      <button role="tab" aria-selected="true" data-tab="netz">Netzwerk</button>
+      <button role="tab" aria-selected="false" data-tab="chart">Chart-Analyse</button>
+    </div>
+    <div data-panel="netz">
+      <div class="stage interactive" data-fit="contain" data-w="411" data-h="870">
+        <div class="fit-target phone-shell">
+          <div class="island"></div>
+          <iframe src="../demos/btc-mate-netzwerk.html" title="BTC Mate Netzwerk, interaktiver Entwurf"></iframe>
+        </div>
+      </div>
+      <p class="stage-note"><b>Entwurf</b> Canvas-Globus ohne Bibliotheken · Zahlen illustrativ · <a href="../demos/btc-mate-netzwerk.html" target="_blank" rel="noopener">In eigenem Tab öffnen</a></p>
+    </div>
+    <div data-panel="chart" hidden>
+      <div class="stage interactive" data-fit="contain" data-w="411" data-h="870">
+        <div class="fit-target phone-shell">
+          <div class="island"></div>
+          <iframe data-src="../demos/btc-mate-chart.html" title="BTC Mate Chart-Analyse, interaktiver Entwurf"></iframe>
+        </div>
+      </div>
+      <p class="stage-note"><b>Entwurf</b> Kerzenchart mit Zeichenwerkzeugen · Kursdaten synthetisch · <a href="../demos/btc-mate-chart.html" target="_blank" rel="noopener">In eigenem Tab öffnen</a></p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="two">
+      <div class="prose">
+        <h2>Was die App macht</h2>
+        <p>Vier Tabs: <strong>Overview</strong> zeigt das Gesamtportfolio mit Wertentwicklung, <strong>Blockchain</strong> die Adressen und ihre Transaktionen, <strong>Insights</strong> Kennzahlen, Netzwerk und Chart-Analyse, <strong>News</strong> aktuelle Meldungen.</p>
+        <p>Die Netzwerk-Seite ist das Herzstück: ein drehbarer Globus, auf dem erreichbare Nodes als leuchtende Punkte stehen und Bögen die Verbindungen zwischen Clustern zeigen. Der Zeitslider läuft von 2009 bis heute, Nodes und Bögen erscheinen im Jahr ihres Entstehens, Halvings sind auf der Zeitachse markiert. Darunter: Kennzahlen mit Sparklines, der Weg einer Transaktion, Nodes nach Land, die Schichten des Netzes, der Mempool, die Angebotskurve und ein Glossar.</p>
+        <p>Auf dem iPhone kommen die Node-Positionen live aus dem Bitnodes-Export, reduziert auf Geo-Bins, eine Stunde gecacht. Der Globus wird in einer <strong>Canvas</strong> innerhalb einer TimelineView gezeichnet, ohne 3D-Bibliothek.</p>
+      </div>
+      <figure class="shot">
+        <img src="../assets/img/btc-mate-network.jpg" alt="Screenshot der Netzwerk-Seite in BTC Mate auf dem iPhone: Globus mit Nodes, Zeitslider, vier Kennzahl-Kacheln mit Sparklines" loading="lazy">
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head"><div><h2>Funktionen</h2></div></div>
+    <div class="features">
+      <div><h4>Read-only</h4><p>Nur öffentliche Adressen. Die App kann nichts senden und nichts verlieren.</p></div>
+      <div><h4>Wertentwicklung</h4><p>Portfolio über 1D, 1W, 1M, 1Y und Max, Kurs live per WebSocket, FIFO-Berechnung auf Android.</p></div>
+      <div><h4>Netzwerk-Globus</h4><p>Nodes, Bögen, Zeitslider mit Zeitraffer, Tipp auf einen Hub zeigt Details.</p></div>
+      <div><h4>Kennzahlen</h4><p>Erreichbare Nodes, Hashrate, Blockhöhe, Difficulty, jeweils mit Verlauf.</p></div>
+      <div><h4>Lernblöcke</h4><p>Transaktionsweg, Schichten des Netzes, Mempool, Halvings und Angebotskurve, Glossar.</p></div>
+      <div><h4>Chart-Analyse</h4><p>Kerzenchart mit Trendlinien, Fibonacci, Kanälen und Indikatoren, Zeichnungen in benannten Gruppen. Als Entwurf fertig.</p></div>
+      <div><h4>Light und Dark</h4><p>Die App folgt dem System, die Globus-Karte bleibt bewusst immer dunkel.</p></div>
+      <div><h4>Zwei Plattformen</h4><p>iOS in SwiftUI mit SwiftData und Swift Charts, Android in Kotlin mit Jetpack Compose und Room.</p></div>
+      <div><h4>Support zweisprachig</h4><p>Support-Seite erkennt die Browsersprache, Englisch als Standard, Deutsch automatisch.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="next">
+      <a href="tube-clean.html"><span>Vorheriges Projekt</span>Tube Clean</a>
+      <a class="r" href="capex-watch.html"><span>Nächstes Projekt</span>Capex Cycle Watch</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap">
+    <span>© 2026 Nikolas Sarafski</span>
+    <nav>
+      <a href="https://github.com/Paray01" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:sarafski.nikolas@gmail.com">E-Mail</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="../assets/site.js"></script>
+</body>
+</html>

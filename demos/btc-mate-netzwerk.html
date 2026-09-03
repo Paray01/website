@@ -1,0 +1,769 @@
+<meta charset="utf-8">
+<title>BTC Mate Netzwerk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&display=swap">
+<style>
+  :root{
+    --ground:#060608;
+    --bg:#0A0A0D;
+    --surface:#141317;
+    --surface-2:#1C1A20;
+    --line:#26232B;
+    --ink:#F3EEE6;
+    --ink-2:#A69F94;
+    --ink-3:#6B655D;
+    --accent:#F7931A;
+    --accent-soft:#FFC978;
+    --accent-dim:rgba(247,147,26,.16);
+    --good:#4CC38A;
+    --mono:"JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    --sans:-apple-system, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:36px 16px;-webkit-font-smoothing:antialiased}
+  .note{color:var(--ink-3);font-size:12px;letter-spacing:.04em;text-transform:uppercase;text-align:center}
+  .note b{color:var(--ink-2);font-weight:600}
+
+  /* ---------- iPhone frame ---------- */
+  .phone{position:relative;width:393px;height:852px;border-radius:56px;background:var(--bg);border:9px solid #1B1A1F;box-shadow:0 0 0 1px #2C2A31,0 40px 90px rgba(0,0,0,.7),0 0 120px rgba(247,147,26,.06);overflow:hidden;flex:none}
+  .island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:122px;height:36px;border-radius:20px;background:#000;z-index:20}
+  .status{position:absolute;top:0;left:0;right:0;height:54px;display:flex;justify-content:space-between;align-items:flex-end;padding:0 32px 12px;font-size:15px;font-weight:600;z-index:19;pointer-events:none}
+  .status svg{height:12px;width:auto}
+  .screen{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;background:var(--bg)}
+  .screen::-webkit-scrollbar{display:none}
+  @media (max-width:520px){
+    body{padding:0}
+    .note{display:none}
+    .phone{width:100vw;height:100dvh;border:0;border-radius:0;box-shadow:none}
+    .island{display:none}
+  }
+
+  /* ---------- nav ---------- */
+  .nav{position:sticky;top:0;z-index:15;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:96px;padding:54px 16px 0;background:rgba(10,10,13,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  .nav .back{display:flex;align-items:center;gap:4px;color:var(--accent);font-size:16px;text-decoration:none}
+  .nav .back svg{width:11px;height:18px}
+  .nav h1{margin:0;font-size:17px;font-weight:600;letter-spacing:-.01em}
+  .nav .live{justify-self:end;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2);font-family:var(--mono)}
+  .nav .live i{width:7px;height:7px;border-radius:50%;background:var(--good);box-shadow:0 0 8px var(--good);animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+  /* ---------- globe ---------- */
+  .globe-wrap{position:relative;height:500px;margin-top:-40px;touch-action:none;user-select:none;-webkit-user-select:none}
+  canvas#globe{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab}
+  canvas#globe:active{cursor:grabbing}
+  .year-block{position:absolute;left:20px;top:60px;pointer-events:none}
+  .year-block .yr{font-family:var(--mono);font-weight:800;font-size:54px;line-height:1;letter-spacing:-.04em;color:var(--ink);font-variant-numeric:tabular-nums}
+  .year-block .sub{margin-top:6px;font-size:13px;color:var(--ink-2)}
+  .year-block .sub b{color:var(--accent);font-family:var(--mono);font-weight:700;font-variant-numeric:tabular-nums}
+  .hint{position:absolute;right:20px;top:72px;font-size:11px;color:var(--ink-3);text-align:right;line-height:1.4;pointer-events:none}
+  .event{position:absolute;left:20px;right:20px;top:150px;display:flex;justify-content:flex-start;pointer-events:none}
+  .event span{display:inline-block;max-width:250px;padding:6px 10px;border-radius:10px;background:rgba(20,19,23,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--line);font-size:12px;color:var(--ink-2);opacity:0;transform:translateY(-4px);transition:opacity .35s,transform .35s}
+  .event span.show{opacity:1;transform:none}
+  .event span b{color:var(--accent-soft);font-weight:600}
+
+  /* timeline */
+  .timeline{position:absolute;left:0;right:0;bottom:0;padding:34px 20px 14px;background:linear-gradient(rgba(10,10,13,0),var(--bg) 55%)}
+  .tl-row{display:flex;align-items:center;gap:12px}
+  .play{flex:none;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);display:grid;place-items:center;cursor:pointer;padding:0}
+  .play:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .play svg{width:13px;height:13px;fill:currentColor}
+  .play .ic-pause{display:none}
+  .play.on .ic-play{display:none}
+  .play.on .ic-pause{display:block}
+  .slider{position:relative;flex:1;height:36px}
+  .slider input{position:absolute;inset:0;width:100%;margin:0;-webkit-appearance:none;appearance:none;background:transparent;cursor:pointer;z-index:2}
+  .slider input::-webkit-slider-runnable-track{height:36px;background:transparent}
+  .slider input::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;margin-top:8px;border-radius:50%;background:var(--accent);border:3px solid var(--bg);box-shadow:0 0 0 1px var(--accent),0 0 18px rgba(247,147,26,.6)}
+  .slider input::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--accent);border:3px solid var(--bg);box-shadow:0 0 0 1px var(--accent),0 0 18px rgba(247,147,26,.6)}
+  .slider input::-moz-range-track{height:36px;background:transparent}
+  .slider input:focus-visible{outline:none}
+  .slider input:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(--accent-soft)}
+  .track{position:absolute;left:0;right:0;top:17px;height:2px;background:var(--line);border-radius:2px}
+  .track-fill{position:absolute;left:0;top:17px;height:2px;background:var(--accent);border-radius:2px;width:0}
+  .ticks{position:absolute;left:0;right:0;top:0;height:36px;pointer-events:none}
+  .ticks i{position:absolute;top:13px;width:1px;height:10px;background:var(--ink-3);opacity:.6}
+  .ticks i.h{top:22px;height:0;width:0;border:4px solid transparent;border-bottom:5px solid var(--accent-soft);opacity:.9;margin-left:-3px}
+  .ticks i.h::after{content:"";position:absolute}
+  .tl-labels{display:flex;justify-content:space-between;margin:2px 0 0 48px;font-family:var(--mono);font-size:10px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+  .tl-legend{margin:6px 0 0 48px;font-size:10px;color:var(--ink-3);display:flex;gap:14px}
+  .tl-legend i{display:inline-block;width:0;height:0;border:4px solid transparent;border-bottom:5px solid var(--accent-soft);margin-right:5px;vertical-align:1px}
+  .tl-legend em{display:inline-block;width:14px;height:1px;background:var(--accent-soft);opacity:.7;margin-right:5px;vertical-align:3px}
+
+  /* ---------- content ---------- */
+  .content{padding:8px 16px 60px;display:flex;flex-direction:column;gap:14px}
+  .section-h{display:flex;align-items:baseline;justify-content:space-between;padding:14px 4px 2px}
+  .section-h h2{margin:0;font-size:20px;font-weight:700;letter-spacing:-.02em;text-wrap:balance}
+  .section-h span{font-size:12px;color:var(--ink-3)}
+  .lead{margin:0 4px;font-size:14px;line-height:1.5;color:var(--ink-2);max-width:62ch}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:16px}
+  .card h3{margin:0 0 4px;font-size:15px;font-weight:600}
+  .card .cap{font-size:12px;color:var(--ink-3);margin:0 0 12px}
+  .card p{font-size:14px;line-height:1.5;color:var(--ink-2);margin:0}
+
+  /* KPI tiles */
+  .kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .tile{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px 14px 10px;display:flex;flex-direction:column;gap:4px;min-height:112px}
+  .tile .lbl{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+  .tile .val{font-family:var(--mono);font-weight:700;font-size:21px;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1}
+  .tile .val small{font-size:12px;color:var(--ink-2);font-weight:500;margin-left:3px}
+  .tile svg{width:100%;height:30px;margin-top:auto;overflow:visible}
+  .tile .spark{fill:none;stroke:var(--accent);stroke-width:1.5;stroke-linejoin:round}
+  .tile .spark-area{fill:url(#sparkFill);stroke:none}
+  .tile .spark-dot{fill:var(--accent-soft);stroke:var(--surface);stroke-width:2}
+
+  /* flow */
+  .flow{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:6px 0 14px}
+  .flow::before{content:"";position:absolute;left:10%;right:10%;top:22px;height:1px;background:var(--line)}
+  .flow .runner{position:absolute;top:19px;left:10%;width:7px;height:7px;border-radius:50%;background:var(--accent-soft);box-shadow:0 0 10px var(--accent);animation:run 6s linear infinite}
+  @keyframes run{0%{left:10%}100%{left:calc(90% - 7px)}}
+  .step{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;background:none;border:0;color:var(--ink-2);font:inherit;font-size:11px;line-height:1.2;text-align:center;cursor:pointer;padding:0}
+  .step i{width:44px;height:44px;border-radius:14px;background:var(--surface-2);border:1px solid var(--line);display:grid;place-items:center;transition:border-color .2s,background .2s,transform .2s}
+  .step i svg{width:20px;height:20px;stroke:var(--ink-2);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .2s}
+  .step.on i{border-color:var(--accent);background:var(--accent-dim);transform:translateY(-2px)}
+  .step.on i svg{stroke:var(--accent)}
+  .step.on{color:var(--ink)}
+  .step:focus-visible i{outline:2px solid var(--accent);outline-offset:2px}
+  .flow-text{border-top:1px solid var(--line);padding-top:12px;min-height:84px}
+  .flow-text b{display:block;font-size:14px;margin-bottom:4px;color:var(--ink)}
+  .flow-text .t{font-size:11px;color:var(--ink-3);margin-top:8px;font-family:var(--mono)}
+
+  /* bars */
+  .bars{display:flex;flex-direction:column;gap:9px}
+  .bar{display:grid;grid-template-columns:104px 1fr 48px;align-items:center;gap:10px;font-size:13px}
+  .bar .n{color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bar .n.hi{color:var(--ink);font-weight:600}
+  .bar .b{height:8px;border-radius:0 4px 4px 0;background:var(--surface-2);position:relative;overflow:hidden}
+  .bar .b i{position:absolute;left:0;top:0;bottom:0;border-radius:0 4px 4px 0;background:var(--ink-3);width:0;transition:width .9s cubic-bezier(.2,.7,.2,1)}
+  .bar.hi .b i{background:var(--accent)}
+  .bar .v{font-family:var(--mono);font-size:12px;text-align:right;color:var(--ink-2);font-variant-numeric:tabular-nums}
+  .foot{margin-top:12px;font-size:11px;color:var(--ink-3);line-height:1.45}
+
+  /* layers */
+  .layers{display:grid;grid-template-columns:124px 1fr;gap:14px;align-items:center}
+  .layers svg{width:124px;height:124px}
+  .layers .ring{fill:none;stroke:var(--ink-3);stroke-width:1.2;cursor:pointer;transition:stroke .2s}
+  .layers .ring.on{stroke:var(--accent);stroke-width:2}
+  .layers .core{fill:var(--accent);opacity:.9;cursor:pointer}
+  .layers .core.dim{opacity:.35}
+  .layer-list{display:flex;flex-direction:column;gap:6px}
+  .layer-btn{display:flex;flex-direction:column;gap:1px;background:none;border:0;border-left:2px solid transparent;padding:5px 8px;text-align:left;font:inherit;color:var(--ink-2);font-size:13px;line-height:1.25;cursor:pointer;border-radius:0 8px 8px 0}
+  .layer-btn em{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+  .layer-btn.on{color:var(--ink);border-left-color:var(--accent);background:var(--accent-dim)}
+  .layer-btn:focus-visible{outline:2px solid var(--accent)}
+  .layer-text{grid-column:1/-1;border-top:1px solid var(--line);padding-top:10px;font-size:13px;line-height:1.5;color:var(--ink-2);min-height:64px}
+
+  /* mempool */
+  .blocks{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+  .blk{aspect-ratio:1/1.05;border-radius:12px;border:1px solid var(--line);background:var(--surface-2);position:relative;overflow:hidden;padding:8px;display:flex;flex-direction:column;justify-content:flex-end;gap:2px}
+  .blk::before{content:"";position:absolute;left:0;right:0;bottom:0;height:var(--fill);background:linear-gradient(rgba(247,147,26,.25),rgba(247,147,26,.55))}
+  .blk.next{border-color:var(--accent)}
+  .blk b{position:relative;font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+  .blk span{position:relative;font-size:10px;color:var(--ink-2)}
+  .blk .eta{position:absolute;top:7px;left:8px;font-size:10px;color:var(--ink-3);font-family:var(--mono)}
+  .fees{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .fee{border:1px solid var(--line);border-radius:12px;padding:10px;background:var(--bg)}
+  .fee .l{font-size:11px;color:var(--ink-3)}
+  .fee .v{font-family:var(--mono);font-size:16px;font-weight:700;font-variant-numeric:tabular-nums;margin:2px 0}
+  .fee .v small{font-size:10px;color:var(--ink-2);font-weight:500}
+  .fee .e{font-size:11px;color:var(--ink-2)}
+  .fee.hi{border-color:var(--accent)}
+
+  /* supply chart */
+  .chart{position:relative}
+  .chart svg{width:100%;height:182px;overflow:visible;display:block;touch-action:none}
+  .chart .grid{stroke:var(--line);stroke-width:1}
+  .chart .cap-line{stroke:var(--ink-3);stroke-width:1;stroke-dasharray:3 4}
+  .chart .area{fill:url(#supplyFill)}
+  .chart .line{fill:none;stroke:var(--accent);stroke-width:2;stroke-linejoin:round}
+  .chart .halv{stroke:var(--accent-soft);stroke-width:1;stroke-dasharray:2 3;opacity:.75}
+  .chart .cursor{stroke:var(--ink);stroke-width:1;opacity:.6}
+  .chart .cdot{fill:var(--accent-soft);stroke:var(--bg);stroke-width:2}
+  .chart text{font-family:var(--mono);font-size:10px;fill:var(--ink-3)}
+  .chart text.tip{fill:var(--ink);font-weight:700;font-size:11px}
+  .chart text.tip2{fill:var(--ink-2)}
+  .halvings{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}
+  .hv{border-radius:10px;background:var(--bg);border:1px solid var(--line);padding:8px;text-align:center}
+  .hv .d{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+  .hv .r{font-family:var(--mono);font-size:13px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}
+  .hv .r small{color:var(--ink-3);font-weight:500}
+  .hv.past{opacity:.55}
+  .hv.now{border-color:var(--accent);opacity:1}
+
+  /* glossary */
+  .gloss{display:flex;flex-direction:column;gap:0}
+  .gloss details{border-top:1px solid var(--line)}
+  .gloss details:first-child{border-top:0}
+  .gloss summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding:12px 2px;font-size:15px;font-weight:600}
+  .gloss summary::-webkit-details-marker{display:none}
+  .gloss summary::after{content:"+";font-family:var(--mono);color:var(--accent);font-size:18px;font-weight:500;transition:transform .2s}
+  .gloss details[open] summary::after{transform:rotate(45deg)}
+  .gloss summary:focus-visible{outline:2px solid var(--accent);border-radius:6px}
+  .gloss p{padding:0 2px 14px}
+  .gloss p a{color:var(--accent);text-decoration:none}
+
+  .disclaimer{font-size:11px;color:var(--ink-3);line-height:1.5;text-align:center;padding:8px 20px 0}
+
+  @media (prefers-reduced-motion:reduce){
+    .flow .runner,.nav .live i{animation:none}
+    .bar .b i{transition:none}
+  }
+</style>
+
+<p class="note"><b>BTC Mate</b> · Entwurf Netzwerk-Seite · Globus ziehen, Slider scrubbt die Jahre</p>
+
+<div class="phone">
+  <div class="island"></div>
+  <div class="status"><span>9:41</span>
+    <svg viewBox="0 0 60 12" fill="currentColor"><rect x="0" y="6" width="3" height="6" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/><rect x="32" y="1" width="24" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="1"/><rect x="34" y="3" width="18" height="6" rx="1.5"/><rect x="57.5" y="4" width="2" height="4" rx="1"/></svg>
+  </div>
+
+  <div class="screen" id="screen">
+    <div class="nav">
+      <a class="back" href="#" onclick="return false"><svg viewBox="0 0 11 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 1.5 2 9l7.5 7.5"/></svg>Portfolio</a>
+      <h1>Netzwerk</h1>
+      <div class="live"><i></i>live</div>
+    </div>
+
+    <section class="globe-wrap" id="globeWrap" aria-label="Interaktiver Globus des Bitcoin-Netzwerks">
+      <canvas id="globe"></canvas>
+      <div class="year-block">
+        <div class="yr" id="yearBig">2026</div>
+        <div class="sub"><b id="nodesBig">22.400</b> erreichbare Nodes</div>
+      </div>
+      <div class="hint">ziehen zum Drehen<br>tippen: Cluster</div>
+      <div class="event"><span id="eventPill"></span></div>
+
+      <div class="timeline">
+        <div class="tl-row">
+          <button class="play" id="play" aria-label="Zeitraffer abspielen">
+            <svg class="ic-play" viewBox="0 0 12 12"><path d="M2 1.2v9.6L10.4 6z"/></svg>
+            <svg class="ic-pause" viewBox="0 0 12 12"><rect x="2" y="1.5" width="3" height="9" rx=".8"/><rect x="7" y="1.5" width="3" height="9" rx=".8"/></svg>
+          </button>
+          <div class="slider">
+            <div class="track"></div><div class="track-fill" id="trackFill"></div>
+            <div class="ticks" id="ticks"></div>
+            <input type="range" id="year" min="2009" max="2026.7" step="0.02" value="2026.7" aria-label="Jahr">
+          </div>
+        </div>
+        <div class="tl-labels"><span>2009</span><span>2013</span><span>2017</span><span>2021</span><span>2026</span></div>
+        <div class="tl-legend"><span><i></i>Halving</span><span><em></em>Verbindung zwischen Clustern</span></div>
+      </div>
+    </section>
+
+    <div class="content">
+      <div class="kpis">
+        <div class="tile"><div class="lbl">Erreichbare Nodes</div><div class="val" id="kNodes">–</div><svg viewBox="0 0 100 30" preserveAspectRatio="none" id="sNodes"></svg></div>
+        <div class="tile"><div class="lbl">Hashrate</div><div class="val" id="kHash">–</div><svg viewBox="0 0 100 30" preserveAspectRatio="none" id="sHash"></svg></div>
+        <div class="tile"><div class="lbl">Blockhöhe</div><div class="val" id="kHeight">–</div><svg viewBox="0 0 100 30" preserveAspectRatio="none" id="sHeight"></svg></div>
+        <div class="tile"><div class="lbl">Difficulty</div><div class="val" id="kDiff">–</div><svg viewBox="0 0 100 30" preserveAspectRatio="none" id="sDiff"></svg></div>
+      </div>
+
+      <div class="section-h"><h2>So läuft eine Transaktion</h2><span>tippen</span></div>
+      <div class="card">
+        <div class="flow" id="flow">
+          <div class="runner"></div>
+          <button class="step on" data-i="0"><i><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10h18M16 15h2"/></svg></i>Wallet<br>signiert</button>
+          <button class="step" data-i="1"><i><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/><circle cx="4" cy="6" r="1.6"/><circle cx="20" cy="6" r="1.6"/><circle cx="4" cy="18" r="1.6"/><circle cx="20" cy="18" r="1.6"/><path d="M10 11 5.5 7M14 11l4.5-4M10 13l-4.5 4M14 13l4.5 4"/></svg></i>Broadcast<br>an Peers</button>
+          <button class="step" data-i="2"><i><svg viewBox="0 0 24 24"><path d="M4 4h16v6H4zM4 14h16v6H4z"/><path d="M8 7h.01M8 17h.01"/></svg></i>Mempool</button>
+          <button class="step" data-i="3"><i><svg viewBox="0 0 24 24"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="3.5"/></svg></i>Miner<br>findet Block</button>
+          <button class="step" data-i="4"><i><svg viewBox="0 0 24 24"><path d="M12 3l8 3.5v5c0 4.5-3.4 8.2-8 9.5-4.6-1.3-8-5-8-9.5v-5z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></i>Nodes<br>prüfen</button>
+        </div>
+        <div class="flow-text" id="flowText"></div>
+      </div>
+
+      <div class="section-h"><h2>Wo die Nodes stehen</h2><span>Anteil erreichbarer Nodes</span></div>
+      <div class="card">
+        <div class="bars" id="countryBars"></div>
+        <p class="foot">Etwa die Hälfte aller erreichbaren Nodes läuft hinter Tor und verrät kein Land. Die Anteile beziehen sich auf Nodes mit sichtbarer IP-Adresse.</p>
+      </div>
+
+      <div class="section-h"><h2>Wer das Netz bildet</h2><span>tippen</span></div>
+      <div class="card">
+        <div class="layers">
+          <svg viewBox="0 0 150 150" id="layerSvg" aria-hidden="true">
+            <circle class="ring" data-l="0" cx="75" cy="75" r="70"/>
+            <circle class="ring" data-l="1" cx="75" cy="75" r="52"/>
+            <circle class="ring" data-l="2" cx="75" cy="75" r="34"/>
+            <circle class="core" data-l="3" cx="75" cy="75" r="14"/>
+          </svg>
+          <div class="layer-list" id="layerList"></div>
+          <div class="layer-text" id="layerText"></div>
+        </div>
+      </div>
+
+      <div class="section-h"><h2>Mempool jetzt</h2><span id="mpCount">14.180 unbestätigt</span></div>
+      <div class="card">
+        <div class="blocks">
+          <div class="blk next" style="--fill:100%"><span class="eta">~4 min</span><b>8–14</b><span>sat/vB</span></div>
+          <div class="blk" style="--fill:100%"><span class="eta">~14 min</span><b>5–8</b><span>sat/vB</span></div>
+          <div class="blk" style="--fill:92%"><span class="eta">~24 min</span><b>3–5</b><span>sat/vB</span></div>
+          <div class="blk" style="--fill:40%"><span class="eta">~34 min</span><b>1–3</b><span>sat/vB</span></div>
+        </div>
+        <div class="fees">
+          <div class="fee hi"><div class="l">Schnell</div><div class="v">12 <small>sat/vB</small></div><div class="e">nächster Block</div></div>
+          <div class="fee"><div class="l">Normal</div><div class="v">6 <small>sat/vB</small></div><div class="e">ca. 30 min</div></div>
+          <div class="fee"><div class="l">Sparsam</div><div class="v">2 <small>sat/vB</small></div><div class="e">einige Stunden</div></div>
+        </div>
+        <p class="foot">Jeder Block fasst rund 4 MB Gewicht. Die Kästen zeigen, welche Gebühren voraussichtlich in die nächsten Blöcke passen. Deine Transaktion konkurriert um diesen Platz.</p>
+      </div>
+
+      <div class="section-h"><h2>Halvings und Angebot</h2><span>Mio. BTC im Umlauf</span></div>
+      <div class="card">
+        <div class="chart" id="supplyChart"></div>
+        <div class="halvings" id="halvingCards"></div>
+        <p class="foot">Alle 210.000 Blöcke, ungefähr alle vier Jahre, halbiert sich die Belohnung pro Block. Deshalb flacht die Kurve ab und nähert sich 21 Millionen, ohne sie je zu erreichen.</p>
+      </div>
+
+      <div class="section-h"><h2>Begriffe</h2></div>
+      <div class="card gloss" id="gloss"></div>
+
+      <p class="disclaimer">Entwurf. Zahlen sind gerundet und teilweise geschätzt, sie dienen dem Layout. In der App kommen sie live von mempool.space und bitnodes.io.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+'use strict';
+const $ = s => document.querySelector(s);
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+const lerp = (a,b,t) => a+(b-a)*t;
+const de = n => Math.round(n).toLocaleString('de-DE');
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+function mulberry(seed){ return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const rnd = mulberry(20090103);
+
+/* ---------- Jahresdaten (gerundet, illustrativ) ---------- */
+const YEARS = []; for (let y=2009;y<=2026;y++) YEARS.push(y);
+const D = {
+  nodes:  [5,250,2800,6000,10000,7800,6100,5600,9800,10100,9500,10600,13400,15100,17000,19200,21100,22400],
+  hash:   [5e-12,1e-7,1e-5,2e-5,0.01,0.3,0.7,2,15,40,100,140,180,250,500,750,1000,1100],   // EH/s
+  height: [0,32000,100000,160000,214000,278000,336000,391000,446000,501000,556000,610000,663000,716000,770000,823000,877000,930000],
+  diff:   [1,1e4,1e6,1.5e6,1e9,3e10,5e10,2e11,2e12,5e12,1.3e13,1.8e13,2.3e13,3.5e13,7e13,1e14,1.4e14,1.5e14],
+  supply: [0,1.6,5.0,8.0,10.6,12.2,13.7,15.0,16.1,16.8,17.5,18.1,18.6,18.9,19.25,19.57,19.8,19.97],
+};
+const HALVINGS = [{y:2012.87,d:'Nov 2012',r:'25'},{y:2016.52,d:'Jul 2016',r:'12,5'},{y:2020.36,d:'Mai 2020',r:'6,25'},{y:2024.29,d:'Apr 2024',r:'3,125'}];
+const EVENTS = [
+  [2009.0,'<b>3. Jan 2009</b> Genesis-Block, ein einziger Node'],
+  [2010.4,'<b>2010</b> Erste GPU-Miner, Pizza für 10.000 BTC'],
+  [2011.5,'<b>2011</b> Erste Mining-Pools, Nodes in Europa und Asien'],
+  [2012.87,'<b>Nov 2012</b> Erstes Halving: 50 auf 25 BTC'],
+  [2013.9,'<b>2013</b> ASIC-Miner, Hashrate explodiert'],
+  [2016.52,'<b>Jul 2016</b> Zweites Halving: 25 auf 12,5 BTC'],
+  [2017.6,'<b>Aug 2017</b> SegWit aktiviert'],
+  [2018.2,'<b>2018</b> Lightning Network geht live'],
+  [2020.36,'<b>Mai 2020</b> Drittes Halving: 12,5 auf 6,25 BTC'],
+  [2021.5,'<b>2021</b> China verbietet Mining, Hashrate wandert nach USA und Kasachstan'],
+  [2021.85,'<b>Nov 2021</b> Taproot aktiviert'],
+  [2024.29,'<b>Apr 2024</b> Viertes Halving: 6,25 auf 3,125 BTC'],
+];
+function sample(arr, y, log){
+  const t = clamp(y-2009, 0, YEARS.length-1), i = Math.floor(t), f = t-i;
+  const a = arr[i], b = arr[Math.min(i+1, arr.length-1)];
+  if (log) return Math.exp(lerp(Math.log(Math.max(a,1e-15)), Math.log(Math.max(b,1e-15)), f));
+  return lerp(a,b,f);
+}
+function fmtHash(eh){
+  if (eh>=1) return [eh.toLocaleString('de-DE',{maximumFractionDigits:0}),'EH/s'];
+  if (eh>=1e-3) return [(eh*1e3).toLocaleString('de-DE',{maximumFractionDigits:1}),'PH/s'];
+  if (eh>=1e-6) return [(eh*1e6).toLocaleString('de-DE',{maximumFractionDigits:1}),'TH/s'];
+  if (eh>=1e-9) return [(eh*1e9).toLocaleString('de-DE',{maximumFractionDigits:0}),'GH/s'];
+  return [(eh*1e12).toLocaleString('de-DE',{maximumFractionDigits:0}),'MH/s'];
+}
+function fmtDiff(d){
+  if (d>=1e12) return [(d/1e12).toLocaleString('de-DE',{maximumFractionDigits:1}),'T'];
+  if (d>=1e9) return [(d/1e9).toLocaleString('de-DE',{maximumFractionDigits:1}),'G'];
+  if (d>=1e6) return [(d/1e6).toLocaleString('de-DE',{maximumFractionDigits:1}),'M'];
+  if (d>=1e3) return [(d/1e3).toLocaleString('de-DE',{maximumFractionDigits:1}),'k'];
+  return [d.toLocaleString('de-DE',{maximumFractionDigits:0}),''];
+}
+
+/* ---------- Land als Punktraster ---------- */
+const LAND = [
+  [[72,-160],[70,-140],[69,-128],[72,-100],[70,-80],[63,-64],[60,-64],[52,-56],[47,-53],[45,-66],[42,-70],[35,-76],[30,-81],[25,-80],[27,-83],[30,-89],[29,-95],[26,-97],[22,-98],[19,-96],[16,-93],[14,-90],[9,-84],[8,-78],[10,-84],[15,-92],[17,-101],[20,-105],[23,-110],[28,-114],[32,-117],[37,-122],[42,-124],[48,-124],[55,-131],[58,-136],[60,-147],[58,-155],[62,-166],[66,-164],[70,-162]],
+  [[83,-35],[80,-20],[76,-18],[70,-22],[65,-40],[60,-44],[64,-52],[70,-54],[76,-62],[80,-60],[82,-45]],
+  [[12,-72],[11,-64],[8,-60],[5,-52],[0,-50],[-3,-40],[-8,-35],[-13,-38],[-20,-40],[-23,-42],[-28,-48],[-33,-52],[-38,-57],[-42,-64],[-48,-66],[-52,-69],[-55,-67],[-53,-72],[-46,-75],[-40,-73],[-33,-72],[-25,-70],[-18,-71],[-12,-77],[-5,-81],[-1,-80],[2,-78],[7,-77],[9,-76]],
+  [[71,28],[70,20],[64,10],[60,5],[58,8],[56,9],[54,9],[53,5],[51,2],[49,0],[48,-5],[46,-2],[43,-2],[43,-9],[37,-9],[36,-6],[38,0],[43,3],[44,9],[41,13],[38,16],[40,19],[45,13],[42,19],[38,22],[37,23],[40,26],[41,29],[37,27],[36,30],[37,36],[33,35],[31,34],[29,35],[24,37],[18,42],[13,43],[13,45],[16,53],[20,58],[23,59],[25,57],[27,50],[30,49],[26,56],[24,63],[25,67],[20,72],[15,74],[8,77],[10,80],[16,82],[22,89],[22,91],[20,93],[16,95],[10,98],[6,100],[1,103],[2,105],[8,105],[11,109],[16,108],[21,107],[21,110],[23,117],[28,121],[31,122],[35,119],[37,122],[39,118],[41,121],[39,124],[35,126],[35,129],[38,129],[42,130],[47,139],[54,140],[59,155],[62,164],[66,170],[69,178],[70,170],[72,150],[73,130],[76,113],[72,100],[74,88],[71,75],[68,73],[66,70],[68,60],[70,55],[68,45],[66,40],[69,33]],
+  [[37,10],[33,10],[31,20],[32,25],[31,32],[27,34],[22,37],[15,40],[12,43],[11,51],[2,46],[-2,41],[-8,39],[-15,40],[-20,35],[-26,33],[-34,26],[-34,19],[-29,16],[-22,14],[-17,12],[-12,13],[-6,12],[-1,9],[4,9],[4,6],[6,2],[5,-3],[5,-8],[8,-13],[13,-17],[18,-16],[21,-17],[27,-13],[31,-10],[34,-7],[36,-3],[37,3]],
+  [[-12,49],[-16,50],[-25,47],[-26,45],[-20,44],[-16,44]],
+  [[-12,131],[-11,137],[-16,141],[-12,142],[-19,146],[-25,153],[-33,152],[-38,148],[-38,141],[-35,137],[-32,134],[-34,123],[-34,115],[-30,115],[-22,114],[-18,122],[-14,127]],
+  [[45,142],[43,145],[41,141],[37,141],[35,140],[33,135],[31,131],[34,131],[36,136],[39,140],[41,140],[43,141]],
+  [[59,-3],[57,-2],[54,0],[51,1],[50,-5],[53,-4],[55,-6],[58,-6]],
+  [[55,-7],[52,-6],[51,-10],[54,-10]],
+  [[6,95],[-6,106],[-5,104],[2,98]],
+  [[7,117],[1,119],[-4,115],[-1,109],[4,109]],
+  [[-6,106],[-7,114],[-8,114],[-7,106]],
+  [[-1,131],[-3,141],[-9,147],[-8,138],[-5,134]],
+  [[18,121],[14,124],[7,126],[6,122],[13,120],[18,120]],
+  [[-35,173],[-38,178],[-41,175],[-39,174],[-36,174]],
+  [[-41,174],[-44,173],[-47,167],[-42,171]],
+  [[66,-22],[66,-15],[64,-14],[63,-21],[65,-24]],
+  [[23,-82],[22,-77],[20,-75],[22,-80]],
+  [[80,55],[77,68],[73,58],[71,52]],
+];
+const WATER = [
+  [[47,50],[45,52],[40,53],[37,54],[40,49],[44,47],[47,49]],
+  [[46,31],[47,38],[43,40],[41,41],[41,29],[43,28],[45,30]],
+  [[54,10],[54,14],[55,20],[58,23],[60,25],[62,20],[65,22],[64,25],[60,30],[59,24],[57,24],[54,21]],
+];
+function inPoly(lat, lon, poly){
+  let inside = false;
+  for (let i=0, j=poly.length-1; i<poly.length; j=i++){
+    const yi=poly[i][0], xi=poly[i][1], yj=poly[j][0], xj=poly[j][1];
+    if ((yi>lat)!==(yj>lat) && lon < (xj-xi)*(lat-yi)/(yj-yi)+xi) inside = !inside;
+  }
+  return inside;
+}
+function unit(latD, lonD){
+  const la = latD*Math.PI/180, lo = lonD*Math.PI/180, c = Math.cos(la);
+  return [c*Math.cos(lo), Math.sin(la), -c*Math.sin(lo)];
+}
+const dots = [];
+for (let lat=-58; lat<=84; lat+=2.3){
+  const step = 2.3/Math.max(0.2, Math.cos(lat*Math.PI/180));
+  for (let lon=-180; lon<180; lon+=step){
+    const jl = lat + (rnd()-.5)*.6, jo = lon + (rnd()-.5)*.6;
+    if (LAND.some(p=>inPoly(jl,jo,p)) && !WATER.some(p=>inPoly(jl,jo,p))) dots.push(unit(jl,jo));
+  }
+}
+
+/* ---------- Node-Cluster ---------- */
+const CL = [
+  ['Frankfurt',50.1,8.7,10,2010.5],['Amsterdam',52.4,4.9,6,2011],['Paris',48.9,2.3,6,2011.2],['London',51.5,-0.1,7,2010.3],
+  ['Helsinki',60.2,24.9,5,2011.5],['Berlin',52.5,13.4,5,2011],['Zürich',47.4,8.5,4,2012],['Warschau',52.2,21,3,2013],
+  ['Madrid',40.4,-3.7,3,2013],['Rom',41.9,12.5,2,2014],['Stockholm',59.3,18.1,3,2012],['Moskau',55.8,37.6,4,2012],
+  ['Kyjiw',50.4,30.5,2,2014],['New York',40.7,-74,8,2009.2],['Ashburn',39,-77.5,7,2012],['Chicago',41.9,-87.6,4,2011],
+  ['Dallas',32.8,-96.8,4,2013],['San Francisco',37.8,-122.4,7,2010],['Los Angeles',34,-118.2,4,2011],['Seattle',47.6,-122.3,4,2011.5],
+  ['Toronto',43.7,-79.4,4,2011],['Vancouver',49.3,-123.1,2,2013],['Miami',25.8,-80.2,2,2014],['Mexiko-Stadt',19.4,-99.1,1.5,2015],
+  ['São Paulo',-23.5,-46.6,3,2013],['Buenos Aires',-34.6,-58.4,1.5,2014],['Bogotá',4.7,-74.1,1,2016],['Santiago',-33.4,-70.6,1,2016],
+  ['Johannesburg',-26.2,28,1.5,2014],['Lagos',6.5,3.4,1,2018],['Nairobi',-1.3,36.8,.8,2018],['Kairo',30,31.2,.6,2017],
+  ['Dubai',25.2,55.3,1.5,2016],['Tel Aviv',32.1,34.8,1.5,2013],['Istanbul',41,29,1.5,2014],['Mumbai',19.1,72.9,1.5,2015],
+  ['Bangalore',13,77.6,1.2,2016],['Singapur',1.3,103.8,4,2012],['Bangkok',13.8,100.5,1,2016],['Hongkong',22.3,114.2,4,2012],
+  ['Shanghai',31.2,121.5,3,2012],['Peking',39.9,116.4,3,2011],['Shenzhen',22.5,114,3,2013],['Seoul',37.6,127,4,2013],
+  ['Tokio',35.7,139.7,5,2011],['Osaka',34.7,135.5,2,2014],['Taipeh',25,121.5,2,2014],['Sydney',-33.9,151.2,3,2012],
+  ['Melbourne',-37.8,145,2,2013],['Auckland',-36.8,174.8,1,2015],['Perth',-32,115.9,.8,2016],['Jakarta',-6.2,106.8,1,2017],
+  ['Manila',14.6,121,.8,2017],['Ho-Chi-Minh',10.8,106.7,1,2018],['Reykjavík',64.1,-21.9,1,2014],['Dublin',53.3,-6.3,2,2013],
+  ['Lissabon',38.7,-9.1,1.5,2016],['Prag',50.1,14.4,2,2013],['Wien',48.2,16.4,2,2013],['Bukarest',44.4,26.1,1.5,2015],
+  ['Almaty',43.2,76.9,1.5,2021.3],['Texas',30.6,-97,2.5,2021.4],['Salt Lake City',40.8,-111.9,1.2,2015],['Denver',39.7,-105,1.5,2015],
+  ['Atlanta',33.7,-84.4,1.5,2014],['Montreal',45.5,-73.6,2,2013],['Sichuan',30.6,104,3,2016],['Innere Mongolei',40.8,111.7,2,2017],
+];
+const LINKS = [['Frankfurt','New York'],['Frankfurt','Amsterdam'],['Frankfurt','London'],['London','New York'],['New York','Ashburn'],['Ashburn','San Francisco'],['San Francisco','Tokio'],['Tokio','Seoul'],['Tokio','Singapur'],['Singapur','Sydney'],['Frankfurt','Moskau'],['Frankfurt','Singapur'],['Paris','London'],['Paris','Frankfurt'],['Amsterdam','Helsinki'],['Helsinki','Moskau'],['San Francisco','Sydney'],['New York','São Paulo'],['São Paulo','Buenos Aires'],['London','Johannesburg'],['Frankfurt','Dubai'],['Dubai','Mumbai'],['Mumbai','Singapur'],['Hongkong','Shanghai'],['Hongkong','Singapur'],['Peking','Shanghai'],['Toronto','New York'],['Chicago','Dallas'],['Dallas','Ashburn'],['Seattle','San Francisco'],['Los Angeles','San Francisco'],['Zürich','Frankfurt'],['Berlin','Frankfurt'],['Warschau','Berlin'],['Madrid','Paris'],['Istanbul','Frankfurt'],['Tel Aviv','Frankfurt'],['Almaty','Moskau'],['Texas','Dallas'],['Reykjavík','London'],['Dublin','London'],['Lissabon','Madrid'],['Prag','Berlin'],['Wien','Prag'],['Montreal','Toronto'],['Vancouver','Seattle'],['Miami','New York'],['Mexiko-Stadt','Dallas'],['Bogotá','Miami'],['Santiago','Buenos Aires'],['Lagos','London'],['Nairobi','Dubai'],['Kairo','Frankfurt'],['Bangkok','Singapur'],['Jakarta','Singapur'],['Manila','Hongkong'],['Ho-Chi-Minh','Singapur'],['Melbourne','Sydney'],['Auckland','Sydney'],['Perth','Singapur'],['Osaka','Tokio'],['Taipeh','Hongkong'],['Shenzhen','Hongkong'],['Bangalore','Mumbai'],['Bukarest','Wien'],['Kyjiw','Warschau'],['Stockholm','Helsinki'],['Denver','Salt Lake City'],['Atlanta','Miami'],['Sichuan','Shenzhen'],['Innere Mongolei','Peking'],['Rom','Zürich'],['Chicago','Toronto'],['Seoul','Hongkong'],['Moskau','Peking']];
+
+const clusters = CL.map(([name,lat,lon,w,born]) => ({name,lat,lon,w,born,v:unit(lat,lon),phase:rnd()*6.28}));
+const byName = Object.fromEntries(clusters.map(c=>[c.name,c]));
+const nodes = [];
+clusters.forEach(c => {
+  const n = Math.round(c.w*7), spread = 0.9 + c.w*0.28;
+  for (let i=0;i<n;i++){
+    const a = rnd()*6.283, r = spread*Math.sqrt(rnd())*(0.4+rnd()*0.9);
+    const lat = c.lat + Math.sin(a)*r*0.8, lon = c.lon + Math.cos(a)*r/Math.max(.3,Math.cos(c.lat*Math.PI/180));
+    nodes.push({v:unit(lat,lon), born:c.born + rnd()*2.2, s:0.4+rnd()*1.0, phase:rnd()*6.283, spd:0.6+rnd()*1.2});
+  }
+});
+const arcs = LINKS.map(([a,b]) => {
+  const A = byName[a], B = byName[b];
+  const dot = clamp(A.v[0]*B.v[0]+A.v[1]*B.v[1]+A.v[2]*B.v[2],-1,1), om = Math.acos(dot);
+  return {A,B,om,born:Math.max(A.born,B.born)+0.4, off:rnd(), spd:0.05+rnd()*0.06, alt:0.05+0.16*om/Math.PI};
+});
+
+/* ---------- Globus-Render ---------- */
+const cv = $('#globe'), ctx = cv.getContext('2d');
+let W=0,H=0,R=0,cx=0,cy=0,dpr=1;
+function resize(){
+  const r = cv.getBoundingClientRect(); W=r.width; H=r.height; dpr=Math.min(2,devicePixelRatio||1);
+  cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+  R = Math.min(W*0.45, H*0.38); cx=W/2; cy=H*0.54;
+}
+new ResizeObserver(resize).observe(cv); resize();
+
+const stars = Array.from({length:110}, () => ({x:rnd(), y:rnd(), s:rnd()*1.1+0.3, p:rnd()*6.28}));
+let rot = 1.22, tilt = 0.42, vel = 0, velT = 0, nodeRot = rot, nodeTilt = tilt, idleSince = 0, dragging = false, last = null;
+let yearF = 2026.7;
+
+function proj(v, alt, rL, tL){
+  const cr=Math.cos(rL), sr=Math.sin(rL), r=1+alt;
+  const x = (v[0]*cr - v[2]*sr)*r, y = v[1]*r, z = (v[2]*cr + v[0]*sr)*r;
+  const ct=Math.cos(tL), st=Math.sin(tL);
+  const y2 = y*ct - z*st, z2 = y*st + z*ct;
+  const s = R*(1+z2*0.07);
+  return [cx + x*s, cy - y2*s, z2];
+}
+function slerp(a,b,om,t){
+  const so = Math.sin(om); if (so<1e-6) return a;
+  const p = Math.sin((1-t)*om)/so, q = Math.sin(t*om)/so;
+  return [a[0]*p+b[0]*q, a[1]*p+b[1]*q, a[2]*p+b[2]*q];
+}
+const easeOut = t => 1-Math.pow(1-t,3);
+const pop = t => { t=clamp(t,0,1); const c=1.7; return 1+ (c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2); };
+
+function draw(ts){
+  const t = ts/1000;
+  // Bewegung
+  if (!dragging){
+    rot += vel; vel *= 0.94;
+    if (!reduceMotion && t-idleSince > 2.5 && Math.abs(vel)<0.0005) rot -= 0.0016;
+    velT *= 0.9; tilt = clamp(tilt+velT, -1.1, 1.1);
+  }
+  nodeRot += (rot-nodeRot)*0.14; nodeTilt += (tilt-nodeTilt)*0.14;
+  const motion = Math.min(1, Math.abs(rot-nodeRot)*40 + Math.abs(tilt-nodeTilt)*40);
+
+  ctx.clearRect(0,0,W,H);
+  // Sterne
+  stars.forEach(s => { const a = 0.25+0.35*Math.sin(t*0.6+s.p); ctx.fillStyle=`rgba(243,238,230,${a})`; ctx.fillRect(s.x*W, s.y*H, s.s, s.s); });
+  // Atmosphäre
+  let g = ctx.createRadialGradient(cx,cy,R*0.9,cx,cy,R*1.28);
+  g.addColorStop(0,'rgba(247,147,26,0.16)'); g.addColorStop(0.5,'rgba(247,147,26,0.05)'); g.addColorStop(1,'rgba(247,147,26,0)');
+  ctx.fillStyle=g; ctx.beginPath(); ctx.arc(cx,cy,R*1.28,0,6.283); ctx.fill();
+  // Kugel
+  g = ctx.createRadialGradient(cx-R*0.35,cy-R*0.4,R*0.1,cx,cy,R);
+  g.addColorStop(0,'#1A1820'); g.addColorStop(0.7,'#0F0E13'); g.addColorStop(1,'#151319');
+  ctx.fillStyle=g; ctx.beginPath(); ctx.arc(cx,cy,R,0,6.283); ctx.fill();
+  ctx.strokeStyle='rgba(247,147,26,0.22)'; ctx.lineWidth=1; ctx.stroke();
+  // Land
+  for (const v of dots){
+    const p = proj(v,0,rot,tilt); if (p[2]<=0.02) continue;
+    const a = 0.12 + 0.5*Math.pow(p[2],1.2);
+    ctx.fillStyle=`rgba(200,192,180,${a})`; ctx.fillRect(p[0]-0.8, p[1]-0.8, 1.6, 1.6);
+  }
+  // Bögen
+  ctx.lineWidth = 1;
+  for (const arc of arcs){
+    const prog = easeOut(clamp((yearF-arc.born)/0.9,0,1)); if (prog<=0) continue;
+    const N = 44; let open=false, zsum=0, cnt=0;
+    ctx.beginPath();
+    for (let i=0;i<=N;i++){
+      const tt = i/N*prog, v = slerp(arc.A.v,arc.B.v,arc.om,tt);
+      const p = proj(v, Math.sin(tt*Math.PI)*arc.alt, nodeRot, nodeTilt);
+      if (p[2] > -0.04){ if(!open){ctx.moveTo(p[0],p[1]);open=true;} else ctx.lineTo(p[0],p[1]); zsum+=p[2]; cnt++; }
+      else open=false;
+    }
+    if (cnt){ ctx.strokeStyle=`rgba(255,201,120,${0.10+0.22*clamp(zsum/cnt,0,1)})`; ctx.stroke(); }
+    if (prog>=1 && !reduceMotion){
+      const tt = (t*arc.spd + arc.off) % 1, v = slerp(arc.A.v,arc.B.v,arc.om,tt);
+      const p = proj(v, Math.sin(tt*Math.PI)*arc.alt, nodeRot, nodeTilt);
+      if (p[2]>0){ ctx.fillStyle='rgba(255,220,160,0.95)'; ctx.beginPath(); ctx.arc(p[0],p[1],1.4+p[2],0,6.283); ctx.fill(); }
+    }
+  }
+  // Satelliten-Nodes
+  for (const n of nodes){
+    const life = (yearF-n.born)/0.7; if (life<=0) continue;
+    const sc = pop(life);
+    const wob = Math.sin(t*1.4*n.spd+n.phase)*0.004 + motion*Math.sin(t*9+n.phase)*0.02;
+    const p = proj(n.v, 0.012+wob, nodeRot, nodeTilt); if (p[2]<=0) continue;
+    const rad = (0.9+n.s*1.1)*(0.5+0.5*p[2])*sc;
+    const a = (0.35+0.65*p[2])*(0.7+0.3*Math.sin(t*1.7*n.spd+n.phase));
+    ctx.fillStyle=`rgba(247,147,26,${a})`; ctx.beginPath(); ctx.arc(p[0],p[1],rad,0,6.283); ctx.fill();
+  }
+  // Cluster mit Glow
+  for (const c of clusters){
+    const life = (yearF-c.born)/0.8; if (life<=0) continue;
+    const sc = pop(life);
+    const wob = Math.sin(t*1.1+c.phase)*0.005 + motion*Math.sin(t*7+c.phase)*0.025;
+    const p = proj(c.v, 0.02+c.w*0.004+wob, nodeRot, nodeTilt); if (p[2]<=0) continue;
+    const depth = 0.45+0.55*p[2];
+    const gr = (7+c.w*2.4)*depth*sc, breathe = 1+0.08*Math.sin(t*1.3+c.phase);
+    const gg = ctx.createRadialGradient(p[0],p[1],0,p[0],p[1],gr*breathe);
+    gg.addColorStop(0,`rgba(247,147,26,${0.55*depth})`); gg.addColorStop(0.45,`rgba(247,147,26,${0.22*depth})`); gg.addColorStop(1,'rgba(247,147,26,0)');
+    ctx.fillStyle=gg; ctx.beginPath(); ctx.arc(p[0],p[1],gr*breathe,0,6.283); ctx.fill();
+    ctx.fillStyle=`rgba(255,226,180,${0.95*depth})`; ctx.beginPath(); ctx.arc(p[0],p[1],(1.6+c.w*0.28)*depth*sc,0,6.283); ctx.fill();
+    c.sx=p[0]; c.sy=p[1]; c.sz=p[2];
+  }
+  // Limb-Glanz
+  g = ctx.createRadialGradient(cx,cy,R*0.82,cx,cy,R);
+  g.addColorStop(0,'rgba(10,10,13,0)'); g.addColorStop(1,'rgba(10,10,13,0.55)');
+  ctx.fillStyle=g; ctx.beginPath(); ctx.arc(cx,cy,R,0,6.283); ctx.fill();
+  requestAnimationFrame(draw);
+}
+requestAnimationFrame(draw);
+
+/* Interaktion Globus */
+const wrap = $('#globeWrap');
+let downAt = null;
+cv.addEventListener('pointerdown', e => { dragging=true; last=[e.clientX,e.clientY]; downAt=[e.clientX,e.clientY,performance.now()]; vel=0; velT=0; cv.setPointerCapture(e.pointerId); });
+cv.addEventListener('pointermove', e => {
+  if (!dragging) return;
+  const dx=e.clientX-last[0], dy=e.clientY-last[1]; last=[e.clientX,e.clientY];
+  rot -= dx*0.0062; vel = -dx*0.0062*0.6; tilt = clamp(tilt + dy*0.0062, -1.1, 1.1); velT = dy*0.0062*0.6;
+});
+const endDrag = e => {
+  if (!dragging) return; dragging=false; idleSince=performance.now()/1000;
+  if (downAt && Math.hypot(e.clientX-downAt[0], e.clientY-downAt[1])<6 && performance.now()-downAt[2]<350) tapCluster(e);
+};
+cv.addEventListener('pointerup', endDrag); cv.addEventListener('pointercancel', endDrag);
+function tapCluster(e){
+  const r = cv.getBoundingClientRect(), x=e.clientX-r.left, y=e.clientY-r.top;
+  let best=null, bd=22;
+  for (const c of clusters){ if (c.sz===undefined||c.sz<=0||yearF<c.born) continue; const d=Math.hypot(c.sx-x,c.sy-y); if (d<bd){bd=d;best=c;} }
+  if (best) showEvent(`<b>${best.name}</b> · Cluster seit ${Math.floor(best.born)} · rund ${de(best.w*7*(0.8+0.4*Math.sin(best.phase)))} Nodes im Umkreis`, 2600);
+}
+
+/* ---------- Ereignis-Pill ---------- */
+const pill = $('#eventPill'); let pillT = null, lastEvent = -1;
+function showEvent(html, ms){ pill.innerHTML=html; pill.classList.add('show'); clearTimeout(pillT); pillT=setTimeout(()=>pill.classList.remove('show'), ms); }
+function checkEvent(prev, now){
+  for (let i=0;i<EVENTS.length;i++){ const [y,txt]=EVENTS[i]; if (prev<y && now>=y && i!==lastEvent){ lastEvent=i; showEvent(txt, 3200); } }
+}
+
+/* ---------- Slider + Zeitraffer ---------- */
+const slider = $('#year'), fill = $('#trackFill'), play = $('#play');
+const MIN=2009, MAX=2026.7;
+const ticks = $('#ticks');
+[2013,2017,2021].forEach(y => { const i=document.createElement('i'); i.style.left=((y-MIN)/(MAX-MIN)*100)+'%'; ticks.appendChild(i); });
+HALVINGS.forEach(h => { const i=document.createElement('i'); i.className='h'; i.style.left=((h.y-MIN)/(MAX-MIN)*100)+'%'; ticks.appendChild(i); });
+function setYear(y, fromSlider){
+  const prev = yearF; yearF = clamp(y, MIN, MAX);
+  if (!fromSlider) slider.value = yearF;
+  fill.style.width = ((yearF-MIN)/(MAX-MIN)*100)+'%';
+  const yr = Math.floor(yearF);
+  $('#yearBig').textContent = yr;
+  const nodesNow = sample(D.nodes, yearF);
+  $('#nodesBig').textContent = de(nodesNow);
+  updateKpis(nodesNow);
+  updateSupplyCursor();
+  if (yearF>prev) checkEvent(prev, yearF); else lastEvent=-1;
+}
+slider.addEventListener('input', () => { stopPlay(); setYear(parseFloat(slider.value), true); });
+let playing=false, playRaf=null, playLast=0;
+function stopPlay(){ playing=false; play.classList.remove('on'); play.setAttribute('aria-label','Zeitraffer abspielen'); cancelAnimationFrame(playRaf); }
+function tick(ts){
+  if (!playing) return;
+  const dt = (ts-playLast)/1000; playLast=ts;
+  if (yearF>=MAX){ stopPlay(); return; }
+  setYear(yearF + dt*0.75); playRaf=requestAnimationFrame(tick);
+}
+play.addEventListener('click', () => {
+  if (playing){ stopPlay(); return; }
+  if (yearF>=MAX-0.05) { lastEvent=-1; setYear(MIN); }
+  playing=true; play.classList.add('on'); play.setAttribute('aria-label','Zeitraffer anhalten'); playLast=performance.now(); playRaf=requestAnimationFrame(tick);
+});
+
+/* ---------- KPI-Kacheln mit Sparklines ---------- */
+function sparkPath(arr, log){
+  const vals = arr.map(v => log ? Math.log10(Math.max(v,1e-15)) : v);
+  const mn=Math.min(...vals), mx=Math.max(...vals);
+  return vals.map((v,i) => [i/(vals.length-1)*100, 28-(v-mn)/(mx-mn||1)*26]);
+}
+const sparks = [
+  ['sNodes', D.nodes, false], ['sHash', D.hash, true], ['sHeight', D.height, false], ['sDiff', D.diff, true]
+].map(([id, arr, log]) => {
+  const pts = sparkPath(arr, log), svg = document.getElementById(id);
+  const d = pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+  svg.innerHTML = `<defs><linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F7931A" stop-opacity=".35"/><stop offset="1" stop-color="#F7931A" stop-opacity="0"/></linearGradient></defs>
+    <path class="spark-area" d="${d} L100 30 L0 30 Z"/><path class="spark" d="${d}"/><circle class="spark-dot" r="2.6" cx="100" cy="${pts[pts.length-1][1]}"/>`;
+  return {pts, dot: svg.querySelector('.spark-dot'), log, arr};
+});
+function updateKpis(nodesNow){
+  const h = fmtHash(sample(D.hash, yearF, true)), d = fmtDiff(sample(D.diff, yearF, true));
+  $('#kNodes').textContent = de(nodesNow);
+  $('#kHash').innerHTML = `${h[0]}<small>${h[1]}</small>`;
+  $('#kHeight').textContent = de(sample(D.height, yearF));
+  $('#kDiff').innerHTML = `${d[0]}<small>${d[1]}</small>`;
+  const tt = clamp(yearF-2009, 0, YEARS.length-1), i=Math.floor(tt), f=tt-i;
+  sparks.forEach(s => { const a=s.pts[i], b=s.pts[Math.min(i+1,s.pts.length-1)]; s.dot.setAttribute('cx', lerp(a[0],b[0],f).toFixed(1)); s.dot.setAttribute('cy', lerp(a[1],b[1],f).toFixed(1)); });
+}
+
+/* ---------- Transaktionsfluss ---------- */
+const STEPS = [
+  ['Deine Wallet signiert','Die Wallet sucht passende UTXOs, baut daraus die Transaktion und signiert sie mit dem Private Key. Der Key verlässt das Gerät nie, nur die Signatur wird verschickt.','Dauer: Sekundenbruchteil'],
+  ['Broadcast an Peers','Die Transaktion geht an einige verbundene Nodes. Jeder prüft Signatur und Konsensregeln und reicht sie weiter. Nach wenigen Sekunden kennt sie fast das ganze Netz.','Dauer: rund 5 Sekunden'],
+  ['Warten im Mempool','Jeder Node hält seine eigene Liste unbestätigter Transaktionen. Wer mehr Gebühr pro vByte zahlt, wird von den Minern zuerst eingesammelt.','Dauer: Minuten bis Stunden, je nach Gebühr'],
+  ['Ein Miner findet den Block','Miner packen Transaktionen in einen Blockkandidaten und suchen einen Hash unter dem Zielwert. Im Schnitt gelingt das alle 10 Minuten einem von ihnen.','Dauer: im Mittel 10 Minuten'],
+  ['Alle Nodes prüfen nach','Jeder Full Node validiert den neuen Block selbst, niemand vertraut dem Miner. Erst dann gilt deine Transaktion als bestätigt. Ab sechs Blöcken darüber gilt sie als endgültig.','Endgültig: nach etwa 60 Minuten'],
+];
+const flowText = $('#flowText');
+function setStep(i){
+  document.querySelectorAll('.step').forEach((b,j)=>b.classList.toggle('on', j===i));
+  flowText.innerHTML = `<b>${STEPS[i][0]}</b>${STEPS[i][1]}<div class="t">${STEPS[i][2]}</div>`;
+}
+document.querySelectorAll('.step').forEach(b => b.addEventListener('click', () => setStep(+b.dataset.i)));
+setStep(0);
+
+/* ---------- Länder ---------- */
+const COUNTRIES = [['USA',25.8],['Deutschland',18.9],['Frankreich',6.4],['Niederlande',4.4],['Kanada',3.6],['Finnland',3.1],['Großbritannien',2.9],['Russland',2.4]];
+const cb = $('#countryBars');
+COUNTRIES.forEach(([n,v]) => {
+  const hi = n==='Deutschland';
+  const el = document.createElement('div'); el.className='bar'+(hi?' hi':'');
+  el.innerHTML = `<span class="n${hi?' hi':''}">${n}</span><span class="b"><i data-w="${v/COUNTRIES[0][1]*100}"></i></span><span class="v">${v.toLocaleString('de-DE',{minimumFractionDigits:1})} %</span>`;
+  cb.appendChild(el);
+});
+setTimeout(() => cb.querySelectorAll('i').forEach(i=>i.style.width=i.dataset.w+'%'), 400);
+
+/* ---------- Schichten ---------- */
+const LAYERS = [
+  ['Wallets und Light Clients','Millionen','Die meisten Nutzer halten keine eigene Kopie der Blockchain. Ihre Wallet fragt Full Nodes nach Guthaben und Transaktionen. BTC Mate arbeitet genauso: sie liest öffentliche Adressen über einen Node aus.'],
+  ['Lightning Nodes','rund 15.000','Zweite Schicht für schnelle, günstige Zahlungen. Zwei Parteien öffnen einen Kanal mit einer Bitcoin-Transaktion und rechnen danach beliebig oft untereinander ab, ohne das Hauptnetz zu belasten.'],
+  ['Full Nodes','rund 22.000 erreichbar','Das Rückgrat. Jeder Full Node speichert die komplette Blockchain und prüft jede Transaktion und jeden Block gegen die Regeln. Nicht erreichbare Nodes hinter Firewalls kommen dazu, geschätzt über 50.000.'],
+  ['Mining Pools','rund 10 mit über 1 %','Bündeln die Rechenleistung von Tausenden Minern und verteilen die Blockbelohnung. Die Hashrate liegt bei über 1.000 EH/s. Pools schlagen Blöcke vor, entscheiden aber nicht über die Regeln, das tun die Full Nodes.'],
+];
+const layerList = $('#layerList'), layerText = $('#layerText');
+LAYERS.forEach(([n,c],i) => { const b=document.createElement('button'); b.className='layer-btn'; b.dataset.l=i; b.innerHTML=`<span>${n}</span><em>${c}</em>`; layerList.appendChild(b); });
+function setLayer(i){
+  document.querySelectorAll('.layer-btn').forEach((b,j)=>b.classList.toggle('on', j===i));
+  document.querySelectorAll('#layerSvg .ring').forEach(r=>r.classList.toggle('on', +r.dataset.l===i));
+  $('#layerSvg .core').classList.toggle('dim', i!==3);
+  layerText.textContent = LAYERS[i][2];
+}
+document.querySelectorAll('.layer-btn, #layerSvg [data-l]').forEach(el => el.addEventListener('click', ()=>setLayer(+el.dataset.l)));
+setLayer(2);
+
+/* ---------- Angebotskurve ---------- */
+const sc = $('#supplyChart');
+const CW=340, CH=162, PL=6, PR=34, PT=32, PB=22;
+const xOf = y => PL + (y-2009)/(2027-2009)*(CW-PL-PR);
+const yOf = v => PT + (1-v/21)*(CH-PT-PB);
+const supplyPts = YEARS.map((y,i)=>[xOf(y), yOf(D.supply[i])]);
+const lineD = supplyPts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+sc.innerHTML = `<svg viewBox="0 0 ${CW} ${CH}" id="supplySvg">
+  <defs><linearGradient id="supplyFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F7931A" stop-opacity=".32"/><stop offset="1" stop-color="#F7931A" stop-opacity=".02"/></linearGradient></defs>
+  ${[0,7,14].map(v=>`<line class="grid" x1="${PL}" x2="${CW-PR}" y1="${yOf(v)}" y2="${yOf(v)}"/><text x="${CW-PR+6}" y="${yOf(v)+3.5}">${v}</text>`).join('')}
+  <line class="cap-line" x1="${PL}" x2="${CW-PR}" y1="${yOf(21)}" y2="${yOf(21)}"/><text x="${CW-PR+6}" y="${yOf(21)+3.5}">21</text>
+  ${HALVINGS.map(h=>`<line class="halv" x1="${xOf(h.y)}" x2="${xOf(h.y)}" y1="${PT}" y2="${CH-PB}"/>`).join('')}
+  <path class="area" d="${lineD} L${supplyPts[supplyPts.length-1][0]} ${yOf(0)} L${PL} ${yOf(0)} Z"/>
+  <path class="line" d="${lineD}"/>
+  ${[2009,2013,2017,2021,2026].map(y=>`<text x="${xOf(y)}" y="${CH-6}" text-anchor="${y===2009?'start':y===2026?'end':'middle'}">${y}</text>`).join('')}
+  <g id="cur"><line class="cursor" y1="${PT}" y2="${CH-PB}"/><circle class="cdot" r="3.5"/><text class="tip" y="${PT-20}"></text><text class="tip2" y="${PT-8}"></text></g>
+</svg>`;
+const cur = sc.querySelector('#cur');
+function placeCursor(y){
+  const v = sample(D.supply, y), x = xOf(y), yy = yOf(v);
+  cur.querySelector('line').setAttribute('x1',x); cur.querySelector('line').setAttribute('x2',x);
+  const dot = cur.querySelector('circle'); dot.setAttribute('cx',x); dot.setAttribute('cy',yy);
+  const t1=cur.querySelector('.tip'), t2=cur.querySelector('.tip2');
+  const anchor = x>CW-90?'end':'start', ox = x>CW-90?-6:6;
+  t1.setAttribute('x',x+ox); t1.setAttribute('text-anchor',anchor); t1.textContent = v.toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2})+' Mio. BTC';
+  t2.setAttribute('x',x+ox); t2.setAttribute('text-anchor',anchor);
+  const sub = y<2012.87?50:y<2016.52?25:y<2020.36?12.5:y<2024.29?6.25:3.125;
+  t2.textContent = `${Math.floor(y)} · ${sub.toLocaleString('de-DE')} BTC pro Block`;
+  document.querySelectorAll('.hv').forEach((el,i)=>{ el.classList.toggle('past', HALVINGS[i].y<y-0.05); el.classList.toggle('now', Math.abs(HALVINGS[i].y-y)<0.6); });
+}
+let hoverYear = null;
+function updateSupplyCursor(){ placeCursor(hoverYear ?? yearF); }
+const ssvg = sc.querySelector('svg');
+const hoverAt = e => { const r=ssvg.getBoundingClientRect(); const x=(e.clientX-r.left)/r.width*CW; hoverYear = clamp(2009+(x-PL)/(CW-PL-PR)*18, 2009, 2026.7); updateSupplyCursor(); };
+ssvg.addEventListener('pointermove', hoverAt); ssvg.addEventListener('pointerdown', hoverAt);
+ssvg.addEventListener('pointerleave', () => { hoverYear=null; updateSupplyCursor(); });
+ssvg.addEventListener('pointerup', () => { hoverYear=null; updateSupplyCursor(); });
+const hc = $('#halvingCards');
+HALVINGS.forEach(h => { const d=document.createElement('div'); d.className='hv'; d.innerHTML=`<div class="d">${h.d}</div><div class="r">${h.r} <small>BTC</small></div>`; hc.appendChild(d); });
+
+/* ---------- Glossar ---------- */
+const GLOSS = [
+  ['Node','Ein Rechner, der die Bitcoin-Software ausführt und mit anderen Nodes spricht. Full Nodes prüfen alles selbst, Light Clients verlassen sich auf Full Nodes.'],
+  ['Miner','Wer Rechenleistung einsetzt, um neue Blöcke zu finden. Belohnung: die Block-Subsidy plus alle Gebühren der enthaltenen Transaktionen.'],
+  ['Hashrate','Wie viele Hash-Versuche das gesamte Netz pro Sekunde macht. Je höher, desto teurer wäre ein Angriff auf die Kette.'],
+  ['Difficulty','Der Zielwert, den ein Blockhash unterschreiten muss. Wird alle 2.016 Blöcke so angepasst, dass im Schnitt alle 10 Minuten ein Block entsteht.'],
+  ['Block','Ein Paket bestätigter Transaktionen mit Verweis auf den Vorgängerblock. Dieser Verweis macht die Kette manipulationssicher.'],
+  ['Mempool','Wartebereich für unbestätigte Transaktionen. Jeder Node hat seinen eigenen, deshalb weichen die Zahlen zwischen Anbietern leicht ab.'],
+  ['UTXO','Unspent Transaction Output: ein noch nicht ausgegebener Betrag. Dein Guthaben ist die Summe aller UTXOs, die deine Adressen kontrollieren.'],
+  ['Halving','Alle 210.000 Blöcke halbiert sich die Belohnung pro Block. 2009 waren es 50 BTC, seit April 2024 sind es 3,125 BTC.'],
+  ['Lightning','Zahlungskanäle auf der zweiten Schicht. Schnell und günstig, weil nur Öffnen und Schließen des Kanals auf der Blockchain landen.'],
+];
+const gl = $('#gloss');
+GLOSS.forEach(([t,b]) => { const d=document.createElement('details'); d.innerHTML=`<summary>${t}</summary><p>${b}</p>`; gl.appendChild(d); });
+
+setYear(MAX);
+idleSince = 0;
+})();
+</script>

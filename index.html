@@ -1,202 +1,193 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nikolas Sarafski — App- und Softwareentwicklung</title>
-<meta name="description" content="Nikolas Sarafski entwickelt Apps für iOS, Android und Web.">
-<style>
-  :root{
-    --bg:#ffffff;
-    --bg-alt:#f5f6f8;
-    --text:#14161a;
-    --text-muted:#5b6270;
-    --border:#e4e6ea;
-    --accent:#2451ff;
-    --accent-text:#ffffff;
-  }
-  @media (prefers-color-scheme: dark){
-    :root{
-      --bg:#0f1115;
-      --bg-alt:#161920;
-      --text:#eef0f3;
-      --text-muted:#9aa1ac;
-      --border:#262b34;
-      --accent:#5b82ff;
-      --accent-text:#0f1115;
-    }
-  }
-  *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{
-    margin:0;
-    background:var(--bg);
-    color:var(--text);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    line-height:1.6;
-  }
-  a{color:inherit;}
-  .wrap{max-width:1040px;margin:0 auto;padding:0 24px;}
-
-  header{
-    position:sticky;top:0;z-index:10;
-    background:color-mix(in srgb, var(--bg) 88%, transparent);
-    backdrop-filter:blur(8px);
-    border-bottom:1px solid var(--border);
-  }
-  nav.wrap{
-    display:flex;align-items:center;justify-content:space-between;
-    height:64px;
-  }
-  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;text-decoration:none;}
-  .brand-mark{
-    width:32px;height:32px;border-radius:8px;
-    background:var(--accent);color:var(--accent-text);
-    display:flex;align-items:center;justify-content:center;
-    font-weight:700;font-size:14px;
-  }
-  nav ul{list-style:none;display:flex;gap:28px;margin:0;padding:0;}
-  nav ul a{text-decoration:none;font-size:14px;font-weight:500;color:var(--text-muted);}
-  nav ul a:hover{color:var(--text);}
-
-  .hero{padding:96px 0 72px;border-bottom:1px solid var(--border);}
-  .eyebrow{
-    display:inline-block;font-size:13px;font-weight:600;letter-spacing:.04em;
-    color:var(--accent);text-transform:uppercase;margin-bottom:16px;
-  }
-  h1{font-size:clamp(32px,5vw,48px);line-height:1.15;margin:0 0 18px;letter-spacing:-0.01em;}
-  .lede{font-size:19px;color:var(--text-muted);max-width:560px;margin:0 0 32px;}
-  .cta{
-    display:inline-flex;align-items:center;gap:8px;
-    background:var(--accent);color:var(--accent-text);
-    padding:12px 22px;border-radius:8px;font-weight:600;font-size:15px;
-    text-decoration:none;
-  }
-
-  section{padding:72px 0;}
-  section.alt{background:var(--bg-alt);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
-  h2{font-size:26px;margin:0 0 8px;letter-spacing:-0.01em;}
-  .section-lede{color:var(--text-muted);margin:0 0 40px;max-width:520px;}
-
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
-  @media (max-width:760px){.grid{grid-template-columns:1fr;}}
-
-  .card{
-    background:var(--bg);border:1px solid var(--border);border-radius:12px;
-    padding:26px;
-  }
-  section.alt .card{background:var(--bg);}
-  .card h3{margin:0 0 10px;font-size:17px;}
-  .card p{margin:0;color:var(--text-muted);font-size:14.5px;}
-  .card .tag{
-    display:inline-block;font-size:12px;font-weight:600;color:var(--accent);
-    margin-bottom:10px;letter-spacing:.02em;
-  }
-
-  .contact-box{
-    display:flex;align-items:center;justify-content:space-between;gap:24px;
-    flex-wrap:wrap;
-  }
-  .contact-box h2{margin-bottom:6px;}
-  .contact-box p{color:var(--text-muted);margin:0;}
-
-  footer{border-top:1px solid var(--border);padding:32px 0;}
-  footer .wrap{
-    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
-    font-size:13px;color:var(--text-muted);
-  }
-  footer a{text-decoration:none;color:var(--text-muted);}
-  footer a:hover{color:var(--text);}
-</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nikolas Sarafski</title>
+<meta name="description" content="Nikolas Sarafski baut Apps und Werkzeuge für iOS, macOS, Safari und das Web: BTC Mate, Capex Cycle Watch, DOTFEED, Focus. Pomodoro, Tube Clean.">
+<link rel="canonical" href="https://paray01.github.io/website/">
+<meta property="og:title" content="Nikolas Sarafski">
+<meta property="og:description" content="Apps und Werkzeuge für iOS, macOS, Safari und das Web.">
+<meta property="og:image" content="https://paray01.github.io/website/assets/img/btc-mate-network.jpg">
+<meta name="theme-color" content="#0A0A0C">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23141417'/%3E%3Ctext x='16' y='21' text-anchor='middle' font-family='Menlo,monospace' font-size='13' fill='%23E3B45C'%3ENS%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
 
-<header>
-  <nav class="wrap">
-    <a class="brand" href="#top">
-      <span class="brand-mark">NS</span>
-      Nikolas Sarafski
-    </a>
-    <ul>
-      <li><a href="#leistungen">Leistungen</a></li>
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="mark">NS</span>Nikolas Sarafski</a>
+    <ul class="nav">
       <li><a href="#projekte">Projekte</a></li>
+      <li class="hide-s"><a href="#ueber">Über mich</a></li>
       <li><a href="#kontakt">Kontakt</a></li>
+      <li><a class="gh" href="https://github.com/Paray01" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+        GitHub</a></li>
     </ul>
-  </nav>
+  </div>
 </header>
 
-<div id="top" class="hero">
+<section class="hero" id="top">
   <div class="wrap">
-    <span class="eyebrow">Einzelunternehmen</span>
-    <h1>App- und Softwareentwicklung</h1>
-    <p class="lede">Ich entwickle Apps und Software für iOS, Android und das Web — von der ersten Idee bis zur Veröffentlichung im App Store.</p>
-    <a class="cta" href="#kontakt">Kontakt aufnehmen →</a>
-  </div>
-</div>
-
-<section id="leistungen" class="alt">
-  <div class="wrap">
-    <h2>Leistungen</h2>
-    <p class="section-lede">Native und plattformübergreifende Anwendungen, konzipiert und umgesetzt aus einer Hand.</p>
-    <div class="grid">
-      <div class="card">
-        <h3>iOS &amp; macOS Apps</h3>
-        <p>Native Anwendungen mit Swift und SwiftUI, von Utility-Apps bis zu App-Store-Veröffentlichungen.</p>
+    <div>
+      <p class="eyebrow"><b>Nikolas Sarafski</b> · Apps und Web</p>
+      <h1>Apps und Werkzeuge, <em>die eine Sache richtig machen.</em></h1>
+      <p class="lede">Ich entwickle native Apps für iOS und macOS, Safari-Erweiterungen und schlanke Web-Tools ohne Build-Schritt. Hier stehen die Projekte, die fertig sind oder gerade entstehen.</p>
+      <div class="actions">
+        <a class="btn primary" href="#projekte">Projekte ansehen</a>
+        <a class="btn" href="https://github.com/Paray01" target="_blank" rel="noopener">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          github.com/Paray01</a>
       </div>
-      <div class="card">
-        <h3>Android Apps</h3>
-        <p>Native Android-Entwicklung mit Kotlin, abgestimmt auf Material Design.</p>
+    </div>
+    <div class="hero-side">
+      <div class="phone-box" data-fit="contain" data-w="411" data-h="870">
+        <div class="fit-target phone-shell">
+          <div class="island"></div>
+          <iframe src="demos/btc-mate-netzwerk.html" title="BTC Mate Netzwerk, interaktiver Entwurf" loading="eager"></iframe>
+        </div>
       </div>
-      <div class="card">
-        <h3>Web-Anwendungen</h3>
-        <p>Schlanke, schnelle Web-Apps ohne unnötigen Overhead.</p>
-      </div>
+      <p class="caption">Live-Entwurf: <a href="projekte/btc-mate.html">Netzwerk-Seite von BTC Mate</a> · ziehen dreht den Globus</p>
     </div>
   </div>
 </section>
 
-<section id="projekte">
+<section class="section" id="projekte">
   <div class="wrap">
-    <h2>Projekte</h2>
-    <p class="section-lede">Eine Auswahl veröffentlichter Anwendungen.</p>
-    <div class="grid">
-      <div class="card">
-        <span class="tag">macOS</span>
-        <h3>Focus. Pomodoro</h3>
-        <p>Pomodoro-Timer für den Mac, schlank und ablenkungsfrei.</p>
+    <div class="section-head">
+      <div>
+        <h2>Projekte</h2>
+        <p>Fünf Projekte, jedes mit eigener Seite. Web-Projekte laufen hier live in der Vorschau.</p>
       </div>
-      <div class="card">
-        <span class="tag">iOS &amp; Android</span>
-        <h3>BTC Mate</h3>
-        <p>Read-only Bitcoin-Portfolio-Tracker zur Wallet-Übersicht.</p>
-      </div>
-      <div class="card">
-        <span class="tag">Web</span>
-        <h3>DOTFEED</h3>
-        <p>Web-App, die Bilder in Braille-Darstellung umwandelt.</p>
-      </div>
+      <span class="count">05 Projekte</span>
+    </div>
+
+    <div class="projects">
+
+      <a class="project" href="projekte/btc-mate.html" style="--p-accent:var(--btc);--p-bg:#0A0A0D">
+        <div class="preview" style="--pos:50% 12%">
+          <img src="assets/img/btc-mate-network.jpg" alt="BTC Mate, Netzwerk-Seite mit Globus des Bitcoin-Netzwerks" loading="lazy">
+          <span class="live"><i></i>App Store</span>
+        </div>
+        <div class="body">
+          <span class="kicker">iOS · Android · App Store</span>
+          <h3>BTC Mate <span class="arrow">→</span></h3>
+          <p>Read-only Bitcoin-Portfolio-Tracker: Wallet-Adressen beobachten, Wertentwicklung sehen, das Netzwerk auf einem drehbaren Globus verstehen.</p>
+          <div class="tags"><span class="tag">SwiftUI</span><span class="tag">Swift Charts</span><span class="tag">Kotlin</span><span class="tag">mempool.space</span><span class="tag">Version 2.1</span></div>
+        </div>
+      </a>
+
+      <a class="project" href="projekte/capex-watch.html" style="--p-accent:var(--capex);--p-bg:#000">
+        <div class="preview" data-fit="cover" data-w="1280" data-h="800">
+          <iframe src="https://paray01.github.io/capex-watch/" title="Capex Cycle Watch, Live-Vorschau" loading="lazy" tabindex="-1"></iframe>
+          <span class="live"><i></i>Live</span>
+        </div>
+        <div class="body">
+          <span class="kicker">Web · Datenpipeline</span>
+          <h3>Capex Cycle Watch <span class="arrow">→</span></h3>
+          <p>Sechzehn Sensoren für eine Frage: Wird der KI-Ausbau noch von dem Geld bezahlt, das er verdient? Ein Frühwarnsystem für den Kapitalzyklus.</p>
+          <div class="tags"><span class="tag">Python</span><span class="tag">SEC EDGAR</span><span class="tag">FRED</span><span class="tag">Canvas</span></div>
+        </div>
+      </a>
+
+      <a class="project" href="projekte/dotfeed.html" style="--p-accent:var(--dot-brass);--p-bg:#E4DFCE">
+        <div class="preview" data-fit="cover" data-w="1280" data-h="800">
+          <iframe src="https://paray01.github.io/dotfeed/" title="DOTFEED, Live-Vorschau" loading="lazy" tabindex="-1"></iframe>
+          <span class="live"><i></i>Live</span>
+        </div>
+        <div class="body">
+          <span class="kicker">Web</span>
+          <h3>DOTFEED <span class="arrow">→</span></h3>
+          <p>Verwandelt jedes Bild in Unicode-Braille-Punktgrafik. Läuft vollständig im Browser, kein Bild verlässt das Gerät.</p>
+          <div class="tags"><span class="tag">JavaScript</span><span class="tag">Canvas API</span><span class="tag">Otsu</span><span class="tag">MIT</span></div>
+        </div>
+      </a>
+
+      <a class="project" href="projekte/focus-pomodoro.html" style="--p-accent:var(--focus)">
+        <div class="preview" style="--pos:0% 50%">
+          <img src="assets/img/focus-pomodoro-shot-1.jpg" alt="Focus. Pomodoro im Compact-Modus auf einem Mac-Schreibtisch" loading="lazy">
+          <span class="live"><i></i>App Store</span>
+        </div>
+        <div class="body">
+          <span class="kicker">macOS · App Store</span>
+          <h3>Focus. Pomodoro <span class="arrow">→</span></h3>
+          <p>Ein schwebender Pomodoro-Timer, der im Compact-Modus auf 180 mal 80 Punkte schrumpft und in der Menüleiste weiterläuft.</p>
+          <div class="tags"><span class="tag">SwiftUI</span><span class="tag">AppKit</span><span class="tag">StoreKit 2</span><span class="tag">12 Sprachen</span></div>
+        </div>
+      </a>
+
+      <a class="project" href="projekte/tube-clean.html" style="--p-accent:var(--tube)">
+        <div class="preview">
+          <div class="mock mock-tube" aria-hidden="true">
+            <div class="pop">
+              <div class="st"><i></i>Aktiv auf YouTube</div>
+              <p>Bild-in-Bild bleibt offen, die Wiedergabe läuft im Hintergrund weiter.</p>
+            </div>
+            <div class="pip">
+              <span class="lbl">PIP</span>
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <div class="bar"><i></i></div>
+            </div>
+          </div>
+        </div>
+        <div class="body">
+          <span class="kicker">iOS · Safari-Erweiterung</span>
+          <h3>Tube Clean <span class="arrow">→</span></h3>
+          <p>Hält YouTube im Bild-in-Bild-Fenster und lässt Videos im Hintergrund weiterlaufen. Nur eine Berechtigung, keine Datensammlung.</p>
+          <div class="tags"><span class="tag">Safari Web Extension</span><span class="tag">Manifest v3</span><span class="tag">UIKit</span></div>
+        </div>
+      </a>
+
     </div>
   </div>
 </section>
 
-<section id="kontakt" class="alt">
+<section class="section" id="ueber">
   <div class="wrap">
-    <div class="contact-box">
+    <div class="section-head">
+      <div><h2>Über mich</h2></div>
+    </div>
+    <div class="about">
+      <div class="text">
+        <p>In meiner Freizeit entwickle ich eigene Apps und Webseiten und setze dabei Ideen von der ersten Skizze bis zum fertigen Produkt um. Besonders wichtig sind mir <strong>Qualität, intuitive Bedienung und ein klares, modernes Design.</strong></p>
+        <p>Ich mag Lösungen, die technisch zuverlässig funktionieren, dabei aber möglichst einfach wirken und sich für den Nutzer selbstverständlich anfühlen. Beim Entwickeln probiere ich gerne neue Technologien aus und verbessere meine Projekte kontinuierlich weiter.</p>
+      </div>
+      <dl class="facts">
+        <div><dt>Plattformen</dt><dd>iOS, macOS, Safari, Android, Web</dd></div>
+        <div><dt>Sprachen</dt><dd>Swift, Kotlin, JavaScript, Python</dd></div>
+        <div><dt>Code</dt><dd><a href="https://github.com/Paray01" target="_blank" rel="noopener">github.com/Paray01</a></dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="kontakt">
+  <div class="wrap">
+    <div class="contact">
       <div>
         <h2>Kontakt</h2>
-        <p>Für Anfragen und Zusammenarbeit erreichen Sie mich direkt per E-Mail.</p>
+        <p>Für Fragen zu den Apps, Zusammenarbeit oder einfach so: eine E-Mail genügt.</p>
       </div>
-      <a class="cta" href="mailto:sarafski.nikolas@gmail.com">sarafski.nikolas@gmail.com</a>
+      <a class="mail" href="mailto:sarafski.nikolas@gmail.com">sarafski.nikolas@gmail.com</a>
     </div>
   </div>
 </section>
 
-<footer>
+<footer class="footer">
   <div class="wrap">
     <span>© 2026 Nikolas Sarafski</span>
-    <a href="https://github.com/Paray01" target="_blank" rel="noopener">GitHub: github.com/Paray01</a>
+    <nav>
+      <a href="https://github.com/Paray01" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:sarafski.nikolas@gmail.com">E-Mail</a>
+    </nav>
   </div>
 </footer>
 
+<script src="assets/site.js"></script>
 </body>
 </html>

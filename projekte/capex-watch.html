@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Capex Cycle Watch</title>
+<meta name="description" content="Capex Cycle Watch: sechzehn Sensoren, die prüfen, ob der KI-Ausbau noch von dem Geld bezahlt wird, das er verdient. Ein Frühwarnsystem als einzelne HTML-Seite.">
+<meta name="theme-color" content="#0A0A0C">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/site.css">
+<style>:root{--p-accent:var(--capex)}</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../index.html"><span class="mark">NS</span>Nikolas Sarafski</a>
+    <ul class="nav">
+      <li><a href="../index.html#projekte">Projekte</a></li>
+      <li class="hide-s"><a href="../index.html#ueber">Über mich</a></li>
+      <li><a href="../index.html#kontakt">Kontakt</a></li>
+      <li><a class="gh" href="https://github.com/Paray01" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a></li>
+    </ul>
+  </div>
+</header>
+
+<section class="p-hero">
+  <div class="wrap">
+    <a class="crumb" href="../index.html#projekte"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10.5 2 5 8l5.5 6 1-1L7 8l4.5-5z"/></svg>Alle Projekte</a>
+    <div class="p-title">
+      <div class="icon"><svg viewBox="0 0 72 72" aria-hidden="true"><rect width="72" height="72" fill="#0F1420"/><g fill="none" stroke="#4B93FF" stroke-width="2"><circle cx="22" cy="26" r="6"/><circle cx="50" cy="22" r="5"/><circle cx="46" cy="50" r="7"/><circle cx="20" cy="50" r="4"/><path d="M27 24 45 22M49 27l-2 16M40 52 24 51M22 32l-1 14"/></g><circle cx="46" cy="50" r="3" fill="#FF9F0A"/></svg></div>
+      <div>
+        <div class="kicker">Web · Datenpipeline · live</div>
+        <h1>Capex Cycle Watch</h1>
+      </div>
+    </div>
+    <p class="p-lede">Sechzehn Sensoren für eine einzige Frage: Wird der KI-Ausbau noch von dem Geld bezahlt, das er verdient? Kein einziger Aktienkurs ist dabei. Aktien bewegen sich auf Erwartungen, die physische und finanzielle Infrastruktur bewegt sich auf Verpflichtungen, und die drehen zuerst.</p>
+    <dl class="meta">
+      <div><dt>Quellen</dt><dd>SEC EDGAR XBRL, FRED, Vast.ai, alle frei und ohne API-Key</dd></div>
+      <div><dt>Technik</dt><dd>Python ohne Abhängigkeiten, eine HTML-Datei, Canvas-Graph ohne Bibliothek</dd></div>
+      <div><dt>Betrieb</dt><dd>LaunchAgent auf dem Mac um 08:15 und 19:15, Cloud-Routine montags und donnerstags</dd></div>
+      <div><dt>Links</dt><dd><a href="https://paray01.github.io/capex-watch/" target="_blank" rel="noopener">Live-Dashboard</a><br><a href="https://github.com/Paray01/capex-watch" target="_blank" rel="noopener">Quellcode auf GitHub</a></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>Das Dashboard, live</h2>
+        <p>Die echte Seite mit den aktuellen Messwerten. Die Blasen im Verbindungsdiagramm lassen sich ziehen.</p>
+      </div>
+    </div>
+    <div class="web-frame interactive" data-fit="contain" data-w="1180" data-h="720">
+      <iframe src="https://paray01.github.io/capex-watch/" title="Capex Cycle Watch, Live-Dashboard"></iframe>
+    </div>
+    <p class="stage-note"><b>Live</b> aktualisiert bei jedem Lauf auf dem Mac · <a href="https://paray01.github.io/capex-watch/" target="_blank" rel="noopener">In eigenem Tab öffnen</a></p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="two">
+      <div class="prose">
+        <h2>Wie es misst</h2>
+        <p>Acht Sensoren lesen sich selbst aus öffentlichen Quellen: Capex, operativer Cashflow und Umsatz der Hyperscaler je Quartal aus den SEC-Filings, Kreditspreads und Halbleiterpreise aus FRED, der GPU-Mietmarkt aus Vast.ai. Acht weitere brauchen einen Menschen und sagen das auf der Seite auch.</p>
+        <p>Die sechzehn Werte sind in <strong>vier Cluster</strong> gruppiert: Nachfrage, physisches Angebot, Finanzierung und das zahlende Ende. Stufen eskalieren danach, wie viele Cluster gedreht haben, nie danach, wie viele Sensoren. Vier rote Werte in einem Cluster sind ein Signal mit vier Hüten.</p>
+        <p>Das Verbindungsdiagramm zeigt dieselben Werte als Kräftegraph: zwanzig Pfeile kodieren, welcher Wert welchen beeinflusst. Ausgaben treiben Chippreise, Chippreise erreichen Ladenpreise, teurere Geräte verkaufen sich schlechter, schwächere Einnahmen machen die Ausgaben schwerer zu rechtfertigen, die Ausgaben fallen. Die vier Gruppen ordnen sich auf einem Ring in der Reihenfolge des Einflusses an, sodass die Rückkopplung als Schleife lesbar wird.</p>
+      </div>
+      <div class="prose">
+        <h2>Die Leseregeln</h2>
+        <p>Eine Indikatorliste ohne Interpretationsregeln schlägt jedes Quartal Alarm, und nach dem dritten Fehlalarm schaut niemand mehr hin. Vier der sechs Regeln sind im Code erzwungen:</p>
+        <p><strong>Zwei Messungen.</strong> Eine Bewegung zählt erst, wenn sie rund dreißig Tage gehalten hat. Jeder Sensor wird mit dem milderen Wert von heute und vor dreißig Tagen bewertet.</p>
+        <p><strong>Zwei Cluster.</strong> Stufen hängen an Clustern, nicht an Sensoren.</p>
+        <p><strong>Stückzahlen, nie Umsatz.</strong> Preissteigerungen verbergen Mengeneinbrüche. Der verwendete Verbraucherpreisindex fällt normalerweise, flach ist also schon Druck.</p>
+        <p><strong>Nur die aktuelle Generation.</strong> Ein Mietpreis trägt nur Information für den Beschleuniger, den die Leute gerade kaufen. Dass das Silizium vom Vorjahr billig wird, ist die Wertkaskade bei der Arbeit.</p>
+        <p>Die beiden übrigen Regeln, Warum statt nur Ob und Herabstufen mit derselben Disziplin, bleiben menschliches Urteil.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head"><div><h2>Aufbau</h2></div></div>
+    <div class="features">
+      <div><h4>fetch.py</h4><p>Holt die Daten, bewertet, schreibt data.js und löst Alarme aus. Die einzige Implementierung aller Regeln.</p></div>
+      <div><h4>index.html</h4><p>Zeigt das Urteil, berechnet es nicht. Lädt data.js per Script-Tag, läuft deshalb direkt vom Dateisystem.</p></div>
+      <div><h4>manual.json</h4><p>Die acht Sensoren ohne maschinenlesbare Quelle, jeder mit eigenem Stichtag.</p></div>
+      <div><h4>Zwei Läufer</h4><p>Der Mac holt und committet, die Cloud-Routine recherchiert die manuellen Sensoren und bewertet offline neu. Nichts muss zusammengeführt werden.</p></div>
+      <div><h4>Alarme</h4><p>Benachrichtigung nur bei Zustandswechseln, nicht bei jedem Lauf.</p></div>
+      <div><h4>Standardbibliothek</h4><p>Keine Abhängigkeiten, kein Build-Schritt, kein API-Key. Nur eine Kontaktadresse für EDGAR aus der Umgebung.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="next">
+      <a href="btc-mate.html"><span>Vorheriges Projekt</span>BTC Mate</a>
+      <a class="r" href="dotfeed.html"><span>Nächstes Projekt</span>DOTFEED</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap">
+    <span>© 2026 Nikolas Sarafski</span>
+    <nav>
+      <a href="https://github.com/Paray01" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:sarafski.nikolas@gmail.com">E-Mail</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="../assets/site.js"></script>
+</body>
+</html>

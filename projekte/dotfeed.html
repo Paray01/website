@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DOTFEED</title>
+<meta name="description" content="DOTFEED verwandelt jedes Bild in Unicode-Braille-Punktgrafik, vollständig im Browser. Kein Upload, kein Build-Schritt, MIT-Lizenz.">
+<meta name="theme-color" content="#0A0A0C">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+  :root{--p-accent:var(--dot-brass)}
+  .braille{font-family:var(--mono);font-size:13px;line-height:1.15;letter-spacing:.02em;color:var(--ink);white-space:pre;overflow-x:auto;padding:22px 24px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg)}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../index.html"><span class="mark">NS</span>Nikolas Sarafski</a>
+    <ul class="nav">
+      <li><a href="../index.html#projekte">Projekte</a></li>
+      <li class="hide-s"><a href="../index.html#ueber">Über mich</a></li>
+      <li><a href="../index.html#kontakt">Kontakt</a></li>
+      <li><a class="gh" href="https://github.com/Paray01" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a></li>
+    </ul>
+  </div>
+</header>
+
+<section class="p-hero">
+  <div class="wrap">
+    <a class="crumb" href="../index.html#projekte"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10.5 2 5 8l5.5 6 1-1L7 8l4.5-5z"/></svg>Alle Projekte</a>
+    <div class="p-title">
+      <div class="icon"><svg viewBox="0 0 72 72" aria-hidden="true"><rect width="72" height="72" fill="#E4DFCE"/><g fill="#1B1F1B"><circle cx="26" cy="22" r="5"/><circle cx="46" cy="22" r="5"/><circle cx="26" cy="36" r="5"/><circle cx="46" cy="36" r="5" fill="#B4842A"/><circle cx="26" cy="50" r="5"/><circle cx="46" cy="50" r="5"/></g></svg></div>
+      <div>
+        <div class="kicker">Web · live · MIT</div>
+        <h1>DOTFEED</h1>
+      </div>
+    </div>
+    <p class="p-lede">Jedes Unicode-Braille-Zeichen kodiert ein Raster aus acht Punkten, zwei breit und vier hoch. DOTFEED nutzt dieses Raster als Bildschirm: ein Foto hinein, Punktgrafik heraus, die sich überall einfügen lässt, wo Text hinpasst. Alles passiert im Browser, kein Bild wird hochgeladen.</p>
+    <dl class="meta">
+      <div><dt>Technik</dt><dd>Eine HTML-Datei, Canvas API, kein Build-Schritt</dd></div>
+      <div><dt>Zwilling</dt><dd>Python-Kommandozeile mit Pillow, derselbe Algorithmus, gleiche Ausgabe</dd></div>
+      <div><dt>Stand</dt><dd>Veröffentlicht seit August 2026</dd></div>
+      <div><dt>Links</dt><dd><a href="https://paray01.github.io/dotfeed/" target="_blank" rel="noopener">DOTFEED öffnen</a><br><a href="https://github.com/Paray01/dotfeed" target="_blank" rel="noopener">Quellcode auf GitHub</a></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>Ausprobieren</h2>
+        <p>Die echte Seite. Ein Bild hineinziehen, Dichte einstellen, Ergebnis kopieren.</p>
+      </div>
+    </div>
+    <div class="web-frame interactive" data-fit="contain" data-w="1180" data-h="720">
+      <iframe src="https://paray01.github.io/dotfeed/" title="DOTFEED, Bild zu Braille"></iframe>
+    </div>
+    <p class="stage-note"><b>Live</b> · <a href="https://paray01.github.io/dotfeed/" target="_blank" rel="noopener">In eigenem Tab öffnen</a></p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="two">
+      <div class="prose">
+        <h2>Die Verarbeitungskette</h2>
+        <p><strong>Beschneiden.</strong> Das Bild wird auf sein Motiv zugeschnitten, damit leere Ränder keine Auflösung verschwenden.</p>
+        <p><strong>Heruntersampeln.</strong> Jede Braille-Zelle deckt danach genau einen Ausschnitt des Bildes ab.</p>
+        <p><strong>Schwellwert.</strong> Der Schwarz-Weiß-Trennpunkt wird je Bild automatisch bestimmt (Otsu-Verfahren) und lässt sich dann dichter oder lichter schieben.</p>
+        <p><strong>Punkte setzen.</strong> In jeder Zelle gehen die Punkte an, die auf der dunklen Seite der Linie liegen.</p>
+        <p><strong>Nie leer.</strong> Eine Zelle bleibt nie ganz frei: leere Zellen bekommen einen einzelnen stillen Punkt, damit Flächen texturiert bleiben, statt zu reißen.</p>
+      </div>
+      <div>
+        <div class="braille" aria-label="Beispiel einer Braille-Punktgrafik">⠀⠀⠀⠀⠀⠀⢀⣠⣤⣤⣤⣤⣄⡀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⢀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣦⡀⠀⠀⠀⠀
+⠀⠀⠀⣰⣿⣿⡿⠛⠉⠉⠉⠉⠛⢿⣿⣿⣆⠀⠀⠀
+⠀⠀⣰⣿⣿⠏⠀⠀⣀⣀⣀⣀⠀⠀⠹⣿⣿⣆⠀⠀
+⠀⢠⣿⣿⡏⠀⢀⣾⣿⣿⣿⣿⣷⡀⠀⢹⣿⣿⡄⠀
+⠀⣾⣿⣿⠁⠀⣾⣿⣿⠟⠻⣿⣿⣷⠀⠈⣿⣿⣷⠀
+⠀⣿⣿⣿⠀⠀⣿⣿⡏⠀⠀⢹⣿⣿⠀⠀⣿⣿⣿⠀
+⠀⢿⣿⣿⡀⠀⢿⣿⣿⣄⣠⣿⣿⡿⠀⢀⣿⣿⡿⠀
+⠀⠘⣿⣿⣧⠀⠈⠻⣿⣿⣿⣿⠟⠁⠀⣼⣿⣿⠃⠀
+⠀⠀⠹⣿⣿⣧⡀⠀⠀⠉⠉⠀⠀⢀⣼⣿⣿⠏⠀⠀
+⠀⠀⠀⠙⢿⣿⣿⣦⣄⣀⣀⣠⣴⣿⣿⡿⠋⠀⠀⠀
+⠀⠀⠀⠀⠀⠙⠻⢿⣿⣿⣿⣿⡿⠟⠋⠀⠀⠀⠀⠀</div>
+        <p class="stage-note"><b>Beispiel</b> ein Ring, 20 Zellen breit, jede Zelle 2 mal 4 Punkte</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head"><div><h2>Entscheidungen</h2></div></div>
+    <div class="features">
+      <div><h4>Kein Server</h4><p>Die Seite enthält kein fetch, kein XMLHttpRequest, keinen Beacon. Das einzige Externe sind zwei Schriften.</p></div>
+      <div><h4>Kein Build</h4><p>Doppelklick auf index.html genügt. Auf GitHub Pages liegt dieselbe Datei.</p></div>
+      <div><h4>Ein Algorithmus, zwei Fassungen</h4><p>Browser und Python-CLI liefern für dasselbe Bild dieselben Zeichen.</p></div>
+      <div><h4>Auffindbar</h4><p>Canonical, Open Graph, Sitemap und zwölf Topics im Repository, damit die Seite gefunden wird.</p></div>
+      <div><h4>MIT</h4><p>Nutzen, ändern, weitergeben, alles erlaubt.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="next">
+      <a href="capex-watch.html"><span>Vorheriges Projekt</span>Capex Cycle Watch</a>
+      <a class="r" href="focus-pomodoro.html"><span>Nächstes Projekt</span>Focus. Pomodoro</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap">
+    <span>© 2026 Nikolas Sarafski</span>
+    <nav>
+      <a href="https://github.com/Paray01" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:sarafski.nikolas@gmail.com">E-Mail</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="../assets/site.js"></script>
+</body>
+</html>
