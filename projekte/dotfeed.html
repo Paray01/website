@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DOTFEED</title>
-<meta name="description" content="DOTFEED verwandelt jedes Bild in Unicode-Braille-Punktgrafik, vollständig im Browser. Kein Upload, kein Build-Schritt, MIT-Lizenz.">
+<meta name="description" content="DOTFEED verwandelt jedes Bild in Unicode-Braille-Punktgrafik, vollständig im Browser. Kein Upload, MIT-Lizenz.">
 <meta name="theme-color" content="#0A0A0C">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,7 +41,7 @@
     </div>
     <p class="p-lede">Jedes Unicode-Braille-Zeichen kodiert ein Raster aus acht Punkten, zwei breit und vier hoch. DOTFEED nutzt dieses Raster als Bildschirm: ein Foto hinein, Punktgrafik heraus, die sich überall einfügen lässt, wo Text hinpasst. Alles passiert im Browser, kein Bild wird hochgeladen.</p>
     <dl class="meta">
-      <div><dt>Technik</dt><dd>Eine HTML-Datei, Canvas API, kein Build-Schritt</dd></div>
+      <div><dt>Technik</dt><dd>Eine HTML-Datei, Canvas API</dd></div>
       <div><dt>Zwilling</dt><dd>Python-Kommandozeile mit Pillow, derselbe Algorithmus, gleiche Ausgabe</dd></div>
       <div><dt>Stand</dt><dd>Veröffentlicht seit August 2026</dd></div>
       <div><dt>Links</dt><dd><a href="https://paray01.github.io/dotfeed/" target="_blank" rel="noopener">DOTFEED öffnen</a><br><a href="https://github.com/Paray01/dotfeed" target="_blank" rel="noopener">Quellcode auf GitHub</a></dd></div>
@@ -99,7 +99,6 @@
     <div class="section-head"><div><h2>Entscheidungen</h2></div></div>
     <div class="features">
       <div><h4>Kein Server</h4><p>Die Seite enthält kein fetch, kein XMLHttpRequest, keinen Beacon. Das einzige Externe sind zwei Schriften.</p></div>
-      <div><h4>Kein Build</h4><p>Doppelklick auf index.html genügt. Auf GitHub Pages liegt dieselbe Datei.</p></div>
       <div><h4>Ein Algorithmus, zwei Fassungen</h4><p>Browser und Python-CLI liefern für dasselbe Bild dieselben Zeichen.</p></div>
       <div><h4>Auffindbar</h4><p>Canonical, Open Graph, Sitemap und zwölf Topics im Repository, damit die Seite gefunden wird.</p></div>
       <div><h4>MIT</h4><p>Nutzen, ändern, weitergeben, alles erlaubt.</p></div>
